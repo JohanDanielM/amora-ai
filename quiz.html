@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - amora.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+    <div class="quiz-page">
+        <a href="/" class="back-link">← Back to Home</a>
+        <a href="/about.html" class="back-link" style="margin-left: 20px;">← Back to About</a>
+        <div class="quiz-container">
+            <h1 class="quiz-title">AMORA.AI want's to know....</h1>
+            
+            <!-- Question 1 -->
+            <div class="question-box active" id="question1">
+                <div class="question-content">
+                    <div class="question-text-wrapper">
+                        <h2 class="question-number">Question 1</h2>
+                        <p class="question-prompt">How would you describe your current state of mind?</p>
+                        <div class="options">
+                            <button class="option-btn" data-question="1" data-value="focused">Focused and ready to work</button>
+                            <button class="option-btn" data-question="1" data-value="calm">Calm and relaxed</button>
+                            <button class="option-btn" data-question="1" data-value="tired">Mentally tired or distracted</button>
+                            <button class="option-btn" data-question="1" data-value="curious">Curious or exploring</button>
+                        </div>
+                    </div>
+                    <div class="quiz-image-wrapper">
+                        <img src="quiz.png" alt="Quiz" class="quiz-image" id="quizImage">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-box" id="question2">
+                <div class="question-content">
+                    <div class="question-text-wrapper">
+                        <h2 class="question-number">Question 2</h2>
+                        <p class="question-prompt">How would you like to interact with the system today?</p>
+                        <div class="options">
+                            <button class="option-btn" data-question="2" data-value="text">Text-based interaction</button>
+                            <button class="option-btn" data-question="2" data-value="voice">Voice input (speech-to-text)</button>
+                            <button class="option-btn" data-question="2" data-value="image">Image input (upload or describe)</button>
+                            <button class="option-btn" data-question="2" data-value="combination">A combination of all</button>
+                        </div>
+                    </div>
+                    <div class="quiz-image-wrapper">
+                        <img src="quiz.png" alt="Quiz" class="quiz-image">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-box" id="question3">
+                <div class="question-content">
+                    <div class="question-text-wrapper">
+                        <h2 class="question-number">Question 3</h2>
+                        <p class="question-prompt">What type of responses do you prefer to receive?</p>
+                        <div class="options">
+                            <button class="option-btn" data-question="3" data-value="short">Short and precise answers</button>
+                            <button class="option-btn" data-question="3" data-value="detailed">Detailed and explanatory responses</button>
+                            <button class="option-btn" data-question="3" data-value="visual">Visual or creative style (images, charts, or visual aids)</button>
+                            <button class="option-btn" data-question="3" data-value="flexible">Flexible — depends on the situation</button>
+                        </div>
+                    </div>
+                    <div class="quiz-image-wrapper">
+                        <img src="quiz.png" alt="Quiz" class="quiz-image">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-box" id="question4">
+                <div class="question-content">
+                    <div class="question-text-wrapper">
+                        <h2 class="question-number">Question 4</h2>
+                        <p class="question-prompt">Would you like responses to be spoken aloud?</p>
+                        <div class="options">
+                            <button class="option-btn" data-question="4" data-value="yes">Yes, enable text-to-speech</button>
+                            <button class="option-btn" data-question="4" data-value="no">No, display text only</button>
+                        </div>
+                    </div>
+                    <div class="quiz-image-wrapper">
+                        <img src="quiz.png" alt="Quiz" class="quiz-image">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-box" id="question5">
+                <div class="question-content">
+                    <div class="question-text-wrapper">
+                        <h2 class="question-number">Question 5</h2>
+                        <p class="question-prompt">What kind of interface style do you find most comfortable?</p>
+                        <div class="options">
+                            <button class="option-btn" data-question="5" data-value="calm">Calm and minimal</button>
+                            <button class="option-btn" data-question="5" data-value="bright">Bright and engaging</button>
+                            <button class="option-btn" data-question="5" data-value="modern">Modern and futuristic</button>
+                        </div>
+                    </div>
+                    <div class="quiz-image-wrapper">
+                        <img src="quiz.png" alt="Quiz" class="quiz-image">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completion Message -->
+            <div class="completion-box" id="completionBox">
+                <h2>Thank you!</h2>
+                <p>Your preferences have been saved.</p>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="/src/quiz.js"></script>
+    <!-- Auto-reload script for live development -->
+    <script>
+        (function() {
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                let lastModified = {};
+                function checkForChanges() {
+                    fetch(window.location.pathname, {method: 'HEAD', cache: 'no-cache'})
+                        .then(response => {
+                            const lastModifiedHeader = response.headers.get('Last-Modified');
+                            if (lastModifiedHeader) {
+                                if (lastModified[window.location.pathname] && 
+                                    lastModified[window.location.pathname] !== lastModifiedHeader) {
+                                    location.reload();
+                                }
+                                lastModified[window.location.pathname] = lastModifiedHeader;
+                            }
+                        })
+                        .catch(() => {});
+                }
+                setInterval(checkForChanges, 1000);
+            }
+        })();
+    </script>
+</body>
+</html>
+

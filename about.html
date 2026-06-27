@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - amora.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles/main.css">
+</head>
+<body>
+    <div class="about-page" id="aboutPage">
+        <a href="/" class="back-link">← Back to Home</a>
+        
+        <!-- Baby girl gif that moves from left to center -->
+        <div class="baby-girl-container" id="babyGirlContainer">
+            <!-- Baby girl gif -->
+            <img src="baby-girl.gif" alt="Baby Girl" class="baby-girl-gif" id="babyGirlGif">
+            
+            <!-- Speech cloud with text -->
+            <div class="speech-cloud">
+                <p class="greeting-text" id="greetingText">Hello! I want to know you more</p>
+            </div>
+        </div>
+        
+        <!-- Hidden audio element -->
+        <audio id="greetingAudio" preload="auto">
+            <source src="/public/hello-audio.mp3" type="audio/mpeg">
+            <source src="/public/hello-audio.wav" type="audio/wav">
+        </audio>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+    <!-- Auto-reload script for live development -->
+    <script>
+        (function() {
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                let lastModified = {};
+                function checkForChanges() {
+                    fetch(window.location.pathname, {method: 'HEAD', cache: 'no-cache'})
+                        .then(response => {
+                            const lastModifiedHeader = response.headers.get('Last-Modified');
+                            if (lastModifiedHeader) {
+                                if (lastModified[window.location.pathname] && 
+                                    lastModified[window.location.pathname] !== lastModifiedHeader) {
+                                    location.reload();
+                                }
+                                lastModified[window.location.pathname] = lastModifiedHeader;
+                            }
+                        })
+                        .catch(() => {});
+                }
+                setInterval(checkForChanges, 1000);
+            }
+        })();
+    </script>
+</body>
+</html>
+
