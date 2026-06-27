@@ -7,7 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/src/styles/design-tokens.css">
     <link rel="stylesheet" href="/src/styles/main.css">
+    <script src="/src/scripts/toast.js"></script>
     <style>
         /* Login Page Specific Styles */
         .login-page {
@@ -236,6 +239,73 @@
             color: #666;
             margin: 0.5rem 0 0;
             font-weight: 500;
+        }
+
+        /* Auth Tabs Toggle */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(107, 91, 149, 0.1);
+            gap: 1rem;
+            justify-content: center;
+        }
+        .auth-tab-btn {
+            background: none;
+            border: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #999;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .auth-tab-btn:hover {
+            color: #6B5B95;
+        }
+        .auth-tab-btn.active {
+            color: #6B5B95;
+        }
+        .auth-tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #6B5B95, #8B7AA8);
+            border-radius: 3px;
+        }
+
+        /* Form Switch Hidden State */
+        .auth-form-pane {
+            display: none !important;
+        }
+        .auth-form-pane.active {
+            display: flex !important;
+            flex-direction: column;
+            gap: 1.5rem;
+            animation: fadeInForm 0.2s ease forwards;
+        }
+        @keyframes fadeInForm {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Inline Error styling */
+        .form-error-banner {
+            background: #fdf2f2;
+            border: 1px solid #f8b4b4;
+            color: #e74c3c;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            display: none;
+            text-align: center;
         }
 
         /* Form Styles */
@@ -667,7 +737,7 @@
         <div class="geometric-shape shape-3"></div>
 
         <!-- Login Container -->
-        <div class="login-container">
+        <div class="login-container login-card">
             <div class="login-logo">
                 <div class="logo-icon">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -679,19 +749,31 @@
                 <p class="login-subtitle">Where AI Comes to Life! 🚀</p>
             </div>
 
-            <form class="login-form" id="loginForm">
-                <div class="form-group">
-                    <input type="email" id="email" class="form-input" placeholder="Enter your email" required>
-                    <svg class="input-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z"/>
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tabLoginBtn" type="button">LOGIN</button>
+                <button class="auth-tab-btn" id="tabSignupBtn" type="button">SIGN UP</button>
+            </div>
+
+            <!-- Global Form Error Banner -->
+            <div class="form-error-banner" id="formErrorBanner"></div>
+
+            <!-- LOGIN FORM PANE -->
+            <form class="login-form auth-form-pane active" id="loginForm">
+                <div class="input-group">
+                    <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
                     </svg>
+                    <input type="email" id="email" class="input input-with-icon" placeholder="Enter your email" required>
                 </div>
 
-                <div class="form-group">
-                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
-                    <svg class="input-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 8H17V6C17 3.24 14.76 1 12 1S7 3.24 7 6V8H6C4.9 8 4 8.9 4 10V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V10C20 8.9 19.1 8 18 8ZM12 17C10.9 17 10 16.1 10 15S10.9 13 12 13 14 13.9 14 15 13.1 17 12 17ZM9 8V6C9 4.34 10.34 3 12 3S15 4.34 15 6V8H9Z"/>
+                <div class="input-group">
+                    <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                     </svg>
+                    <input type="password" id="password" class="input input-with-icon" placeholder="Enter your password" required>
                 </div>
 
                 <div class="form-options">
@@ -699,38 +781,69 @@
                         <input type="checkbox" id="rememberMe">
                         <span>Remember me</span>
                     </label>
-                    <a href="#" class="forgot-password">Forgot password?</a>
+                    <a href="#" onclick="event.preventDefault(); openForgotModal(); return false;" style="color:#6b46c1; text-decoration:none; font-size:13px;">Forgot password?</a>
                 </div>
 
-                <button type="submit" class="login-btn" id="loginBtn">
+                <button type="submit" class="login-btn btn btn-primary" id="loginBtn">
                     LOGIN
+                </button>
+            </form>
+
+            <!-- SIGNUP FORM PANE -->
+            <form class="login-form auth-form-pane" id="signupForm">
+                <div class="input-group">
+                    <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <input type="text" id="signupName" class="input input-with-icon" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="input-group">
+                    <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <input type="email" id="signupEmail" class="input input-with-icon" placeholder="Enter your email" required>
+                </div>
+
+                <div class="input-group">
+                    <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <input type="password" id="signupPassword" class="input input-with-icon" placeholder="Enter password (min 8 chars)" required>
+                </div>
+
+                <div class="input-group">
+                    <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                    <input type="password" id="signupConfirmPassword" class="input input-with-icon" placeholder="Confirm your password" required>
+                </div>
+
+                <button type="submit" class="login-btn btn btn-primary" id="signupSubmitBtn">
+                    CREATE ACCOUNT
                 </button>
             </form>
 
             <div class="social-login">
                 <p class="social-text">Or sign in with</p>
                 <div class="social-icons">
-                    <button type="button" class="social-btn facebook" title="Facebook">
-                        <span>f</span>
-                    </button>
-                    <button type="button" class="social-btn twitter" title="Twitter">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
-                        </svg>
-                    </button>
-                    <button type="button" class="social-btn google" title="Google">
+                    <a href="/auth/google" class="social-btn google" title="Continue with Google" style="text-decoration:none;">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                             <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                             <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                         </svg>
-                    </button>
-                    <button type="button" class="social-btn github" title="GitHub">
+                    </a>
+                    <a href="/auth/github" class="social-btn github" title="Continue with GitHub" style="text-decoration:none;">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -746,89 +859,207 @@
 
     <script>
         // DOM Elements
+        const tabLoginBtn = document.getElementById('tabLoginBtn');
+        const tabSignupBtn = document.getElementById('tabSignupBtn');
         const loginForm = document.getElementById('loginForm');
-        const loginBtn = document.getElementById('loginBtn');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
+        const signupForm = document.getElementById('signupForm');
+        const formErrorBanner = document.getElementById('formErrorBanner');
         const successOverlay = document.getElementById('successOverlay');
 
-        // Form validation and submission
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Inputs for login
+        const loginEmail = loginForm.querySelector('input[type="email"]');
+        const loginPassword = loginForm.querySelector('input[type="password"]');
 
-            // Clear previous errors
+        // Inputs for signup
+        const signupName = document.getElementById('signupName');
+        const signupEmail = document.getElementById('signupEmail');
+        const signupPassword = document.getElementById('signupPassword');
+        const signupConfirmPassword = document.getElementById('signupConfirmPassword');
+
+        // Buttons
+        const loginSubmitBtn = document.getElementById('loginBtn');
+        const signupSubmitBtn = document.getElementById('signupSubmitBtn');
+
+        // ========== Tab Switch Logic ==========
+        tabLoginBtn.addEventListener('click', () => {
+            tabLoginBtn.classList.add('active');
+            tabSignupBtn.classList.remove('active');
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
             clearErrors();
-
-            // Validate form
-            if (validateForm()) {
-                // Show loading state
-                loginBtn.classList.add('loading');
-                loginBtn.textContent = 'LOGGING IN...';
-
-                // Simulate login process
-                setTimeout(() => {
-                    // Show success
-                    showSuccess();
-
-                    // Reset button
-                    loginBtn.classList.remove('loading');
-                    loginBtn.textContent = 'LOGIN';
-                }, 2000);
-            }
+            hideErrorBanner();
         });
 
-        // Form validation
-        function validateForm() {
-            let isValid = true;
+        tabSignupBtn.addEventListener('click', () => {
+            tabSignupBtn.classList.add('active');
+            tabLoginBtn.classList.remove('active');
+            signupForm.classList.add('active');
+            loginForm.classList.remove('active');
+            clearErrors();
+            hideErrorBanner();
+        });
 
-            // Email validation
-            const email = emailInput.value.trim();
-            if (!email) {
-                showError(emailInput, 'Email is required');
-                isValid = false;
-            } else if (!isValidEmail(email)) {
-                showError(emailInput, 'Please enter a valid email');
-                isValid = false;
-            }
-
-            // Password validation
-            const password = passwordInput.value;
-            if (!password) {
-                showError(passwordInput, 'Password is required');
-                isValid = false;
-            } else if (password.length < 6) {
-                showError(passwordInput, 'Password must be at least 6 characters');
-                isValid = false;
-            }
-
-            return isValid;
+        // ========== Helper: Error Banner ==========
+        function showErrorBanner(message) {
+            formErrorBanner.textContent = message;
+            formErrorBanner.style.display = 'block';
+            formErrorBanner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // Email validation helper
+        function hideErrorBanner() {
+            formErrorBanner.textContent = '';
+            formErrorBanner.style.display = 'none';
+        }
+
+        // ========== Validation Helper ==========
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }
 
-        // Show error
+        // ========== Form Submit: Login ==========
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+            hideErrorBanner();
+
+            let isValid = true;
+            const email = loginEmail.value.trim();
+            const password = loginPassword.value;
+
+            if (!email) {
+                showError(loginEmail, 'Please enter a valid email address.');
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                showError(loginEmail, 'Please enter a valid email address.');
+                isValid = false;
+            }
+
+            if (!password) {
+                showError(loginPassword, 'Password is required.');
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Start loading state
+            setButtonLoading(loginSubmitBtn, true, 'LOGGING IN...');
+
+            fetch('/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.error || 'Invalid email or password.');
+                }
+                return data;
+            })
+            .then(data => {
+                showSuccess(data.redirect || '/dashboard.html');
+            })
+            .catch(err => {
+                showErrorBanner(err.message);
+                setButtonLoading(loginSubmitBtn, false, 'LOGIN');
+            });
+        });
+
+        // ========== Form Submit: Signup ==========
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearErrors();
+            hideErrorBanner();
+
+            let isValid = true;
+            const name = signupName.value.trim();
+            const email = signupEmail.value.trim();
+            const password = signupPassword.value;
+            const confirmPassword = signupConfirmPassword.value;
+
+            if (!name) {
+                showError(signupName, 'Name is required.');
+                isValid = false;
+            }
+
+            if (!email) {
+                showError(signupEmail, 'Please enter a valid email address.');
+                isValid = false;
+            } else if (!isValidEmail(email)) {
+                showError(signupEmail, 'Please enter a valid email address.');
+                isValid = false;
+            }
+
+            if (!password) {
+                showError(signupPassword, 'Password is required.');
+                isValid = false;
+            } else if (password.length < 8) {
+                showError(signupPassword, 'Password must be at least 8 characters.');
+                isValid = false;
+            }
+
+            if (password !== confirmPassword) {
+                showError(signupConfirmPassword, 'Passwords do not match.');
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Start loading state
+            setButtonLoading(signupSubmitBtn, true, 'CREATING ACCOUNT...');
+
+            fetch('/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.error || 'Registration failed. Please try again.');
+                }
+                return data;
+            })
+            .then(data => {
+                showSuccess(data.redirect || '/dashboard.html');
+            })
+            .catch(err => {
+                showErrorBanner(err.message);
+                setButtonLoading(signupSubmitBtn, false, 'CREATE ACCOUNT');
+            });
+        });
+
+        // ========== Loading State Handler ==========
+        function setButtonLoading(button, isLoading, text) {
+            if (isLoading) {
+                button.classList.add('loading');
+                button.disabled = true;
+                button.innerHTML = `<span class="spinner spinner-sm spinner-white" style="margin-right: 8px; vertical-align: middle;"></span> ${text}`;
+            } else {
+                button.classList.remove('loading');
+                button.disabled = false;
+                button.textContent = text;
+            }
+        }
+
+        // ========== Show Input Specific Error ==========
         function showError(input, message) {
             const formGroup = input.parentElement;
             formGroup.classList.add('error');
 
-            // Remove existing error message
             const existingError = formGroup.querySelector('.error-message');
             if (existingError) {
                 existingError.remove();
             }
 
-            // Add error message
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
             errorDiv.textContent = message;
             formGroup.appendChild(errorDiv);
         }
 
-        // Clear errors
+        // ========== Clear Errors ==========
         function clearErrors() {
             const errorGroups = document.querySelectorAll('.form-group.error');
             errorGroups.forEach(group => {
@@ -840,19 +1071,16 @@
             });
         }
 
-        // Show success overlay
-        function showSuccess() {
+        // ========== Show Success Overlay ==========
+        function showSuccess(redirectUrl) {
             successOverlay.classList.add('active');
-
-            // Auto redirect after 3 seconds
             setTimeout(() => {
                 successOverlay.classList.remove('active');
-                // In a real app, you would redirect to the dashboard
-                // window.location.href = '/dashboard.html';
-            }, 3000);
+                window.location.href = redirectUrl;
+            }, 2000);
         }
 
-        // Input focus effects
+        // ========== Input Focus Effects ==========
         const inputs = document.querySelectorAll('.form-input');
         inputs.forEach(input => {
             input.addEventListener('focus', function() {
@@ -864,21 +1092,152 @@
             });
         });
 
-        // Social login buttons (placeholder functionality)
-        const socialBtns = document.querySelectorAll('.social-btn');
-        socialBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // In a real app, this would trigger OAuth login
-                console.log('Social login:', this.title);
-                showSuccess();
-            });
-        });
+        // ========== Error handling from Callback URL params ==========
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const error = params.get('error');
+            if (error) {
+                const messages = {
+                    auth_failed: 'Authentication failed. Please try again.',
+                    google_not_configured: 'Google login is not configured. Please set up OAuth credentials.',
+                    github_not_configured: 'GitHub login is not configured. Please set up OAuth credentials.'
+                };
+                showErrorBanner(messages[error] || 'An error occurred. Please try again.');
+                // Clean URL params
+                window.history.replaceState({}, '', window.location.pathname);
+            }
+        })();
 
-        // Forgot password link
-        document.querySelector('.forgot-password').addEventListener('click', function(e) {
-            e.preventDefault();
-            // In a real app, this would show a password reset modal
-            alert('Password reset functionality would be implemented here.');
+        // ========== Forgot Password Modal ==========
+        window.openForgotModal = function() {
+            console.log('openForgotModal called');
+            const modal = document.getElementById('forgot-modal');
+            if (!modal) {
+                console.error('Forgot password modal not found in DOM');
+                showToast('Forgot password feature unavailable. Please refresh.', 'error');
+                return;
+            }
+            modal.style.display = 'flex';
+            document.getElementById('forgot-step-1').style.display = 'block';
+            document.getElementById('forgot-step-2').style.display = 'none';
+            document.getElementById('forgot-error').textContent = '';
+            document.getElementById('reset-error').textContent = '';
+        };
+
+        window.closeForgotModal = function() {
+            console.log('closeForgotModal called');
+            document.getElementById('forgot-modal').style.display = 'none';
+        };
+
+        window.sendResetCode = async function() {
+            console.log('sendResetCode called');
+            const email = document.getElementById('forgot-email').value.trim();
+            const errorEl = document.getElementById('forgot-error');
+            const btn = document.getElementById('send-code-btn');
+            
+            errorEl.textContent = '';
+            
+            if (!email || !email.includes('@')) {
+                errorEl.textContent = 'Please enter a valid email';
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            
+            try {
+                const res = await fetch('/auth/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                console.log('Response:', data);
+                
+                if (data.success) {
+                    document.getElementById('forgot-step-1').style.display = 'none';
+                    document.getElementById('forgot-step-2').style.display = 'block';
+                    if (data.devCode) {
+                        document.getElementById('dev-code-display').innerHTML = 
+                            `🔑 Your reset code: <strong style="font-size:18px;">${data.devCode}</strong><br><small>(In production, this would be emailed to you)</small>`;
+                    } else {
+                        document.getElementById('dev-code-display').innerHTML = 
+                            `📧 A reset code has been sent to your email (if it exists).`;
+                    }
+                } else {
+                    errorEl.textContent = data.error || 'Something went wrong';
+                }
+            } catch (err) {
+                errorEl.textContent = 'Connection error. Try again.';
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Send Reset Code';
+            }
+        };
+
+        window.resetPassword = async function() {
+            console.log('resetPassword called');
+            const email = document.getElementById('forgot-email').value.trim();
+            const code = document.getElementById('reset-code').value.trim();
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-new-password').value;
+            const errorEl = document.getElementById('reset-error');
+            const btn = document.getElementById('reset-btn');
+            
+            errorEl.textContent = '';
+            
+            if (code.length !== 6) {
+                errorEl.textContent = 'Code must be 6 digits';
+                return;
+            }
+            if (newPassword.length < 8) {
+                errorEl.textContent = 'Password must be at least 8 characters';
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                errorEl.textContent = 'Passwords do not match';
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.textContent = 'Resetting...';
+            
+            try {
+                const res = await fetch('/auth/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, code, newPassword })
+                });
+                const data = await res.json();
+                console.log('Response:', data);
+                
+                if (data.success) {
+                    showToast('Password reset successfully! You can now login with your new password.', 'success');
+                    closeForgotModal();
+                    // Pre-fill login email
+                    const loginEmail = document.getElementById('email');
+                    if (loginEmail) loginEmail.value = email;
+                } else {
+                    errorEl.textContent = data.error || 'Reset failed. Check your code.';
+                }
+            } catch (err) {
+                errorEl.textContent = 'Connection error. Try again.';
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Reset Password';
+            }
+        };
+
+        // Close modal when clicking outside
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('forgot-modal');
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeForgotModal();
+                });
+            }
         });
     </script>
 
@@ -905,5 +1264,31 @@
             }
         })();
     </script>
+    <!-- Forgot Password Modal -->
+    <div id="forgot-modal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+      <div style="background:white; padding:2rem; border-radius:12px; max-width:420px; width:90%; position:relative; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+        
+        <button onclick="closeForgotModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:28px; cursor:pointer; color:#888;">×</button>
+        
+        <div id="forgot-step-1">
+          <h3 style="color:#6b46c1; margin-bottom:8px;">Reset Your Password</h3>
+          <p style="color:#666; margin-bottom:20px; font-size:14px;">Enter your email to receive a reset code</p>
+          <input type="email" id="forgot-email" class="input" placeholder="your@email.com" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-bottom:12px; box-sizing:border-box;">
+          <button onclick="sendResetCode()" id="send-code-btn" class="btn btn-primary" style="width:100%; padding:12px; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Send Reset Code</button>
+          <p id="forgot-error" style="color:red; margin-top:10px; font-size:13px;"></p>
+        </div>
+        
+        <div id="forgot-step-2" style="display:none;">
+          <h3 style="color:#6b46c1; margin-bottom:8px;">Enter Reset Code</h3>
+          <div id="dev-code-display" style="background:#f3eaff; padding:12px; border-radius:8px; margin-bottom:16px; font-size:14px; color:#6b46c1;"></div>
+          <input type="text" id="reset-code" class="input" placeholder="6-digit code" maxlength="6" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-bottom:10px; box-sizing:border-box;">
+          <input type="password" id="new-password" class="input" placeholder="New password (min 8 chars)" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-bottom:10px; box-sizing:border-box;">
+          <input type="password" id="confirm-new-password" class="input" placeholder="Confirm new password" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; margin-bottom:12px; box-sizing:border-box;">
+          <button onclick="resetPassword()" id="reset-btn" class="btn btn-primary" style="width:100%; padding:12px; color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer;">Reset Password</button>
+          <p id="reset-error" style="color:red; margin-top:10px; font-size:13px;"></p>
+        </div>
+        
+      </div>
+    </div>
 </body>
 </html>

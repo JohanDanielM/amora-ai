@@ -7,14 +7,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/src/styles/design-tokens.css">
     <link rel="stylesheet" href="/src/styles/main.css">
+    <script src="/src/scripts/toast.js"></script>
 </head>
 <body>
     <div class="quiz-page">
         <a href="/" class="back-link">← Back to Home</a>
-        <a href="/about.html" class="back-link" style="margin-left: 20px;">← Back to About</a>
         <div class="quiz-container">
-            <h1 class="quiz-title">AMORA.AI want's to know....</h1>
+            <h1 class="quiz-title">AMORA.AI wants to know....</h1>
             
             <!-- Question 1 -->
             <div class="question-box active" id="question1">
@@ -23,10 +25,10 @@
                         <h2 class="question-number">Question 1</h2>
                         <p class="question-prompt">How would you describe your current state of mind?</p>
                         <div class="options">
-                            <button class="option-btn" data-question="1" data-value="focused">Focused and ready to work</button>
-                            <button class="option-btn" data-question="1" data-value="calm">Calm and relaxed</button>
-                            <button class="option-btn" data-question="1" data-value="tired">Mentally tired or distracted</button>
-                            <button class="option-btn" data-question="1" data-value="curious">Curious or exploring</button>
+                            <button class="option-btn btn btn-secondary" data-question="1" data-value="focused">Focused and ready to work</button>
+                            <button class="option-btn btn btn-secondary" data-question="1" data-value="calm">Calm and relaxed</button>
+                            <button class="option-btn btn btn-secondary" data-question="1" data-value="tired">Mentally tired or distracted</button>
+                            <button class="option-btn btn btn-secondary" data-question="1" data-value="curious">Curious or exploring</button>
                         </div>
                     </div>
                     <div class="quiz-image-wrapper">
@@ -42,10 +44,10 @@
                         <h2 class="question-number">Question 2</h2>
                         <p class="question-prompt">How would you like to interact with the system today?</p>
                         <div class="options">
-                            <button class="option-btn" data-question="2" data-value="text">Text-based interaction</button>
-                            <button class="option-btn" data-question="2" data-value="voice">Voice input (speech-to-text)</button>
-                            <button class="option-btn" data-question="2" data-value="image">Image input (upload or describe)</button>
-                            <button class="option-btn" data-question="2" data-value="combination">A combination of all</button>
+                            <button class="option-btn btn btn-secondary" data-question="2" data-value="text">Text-based interaction</button>
+                            <button class="option-btn btn btn-secondary" data-question="2" data-value="voice">Voice input (speech-to-text)</button>
+                            <button class="option-btn btn btn-secondary" data-question="2" data-value="image">Image input (upload or describe)</button>
+                            <button class="option-btn btn btn-secondary" data-question="2" data-value="combination">A combination of all</button>
                         </div>
                     </div>
                     <div class="quiz-image-wrapper">
@@ -61,10 +63,10 @@
                         <h2 class="question-number">Question 3</h2>
                         <p class="question-prompt">What type of responses do you prefer to receive?</p>
                         <div class="options">
-                            <button class="option-btn" data-question="3" data-value="short">Short and precise answers</button>
-                            <button class="option-btn" data-question="3" data-value="detailed">Detailed and explanatory responses</button>
-                            <button class="option-btn" data-question="3" data-value="visual">Visual or creative style (images, charts, or visual aids)</button>
-                            <button class="option-btn" data-question="3" data-value="flexible">Flexible — depends on the situation</button>
+                            <button class="option-btn btn btn-secondary" data-question="3" data-value="short">Short and precise answers</button>
+                            <button class="option-btn btn btn-secondary" data-question="3" data-value="detailed">Detailed and explanatory responses</button>
+                            <button class="option-btn btn btn-secondary" data-question="3" data-value="visual">Visual or creative style (images, charts, or visual aids)</button>
+                            <button class="option-btn btn btn-secondary" data-question="3" data-value="flexible">Flexible — depends on the situation</button>
                         </div>
                     </div>
                     <div class="quiz-image-wrapper">
@@ -80,8 +82,8 @@
                         <h2 class="question-number">Question 4</h2>
                         <p class="question-prompt">Would you like responses to be spoken aloud?</p>
                         <div class="options">
-                            <button class="option-btn" data-question="4" data-value="yes">Yes, enable text-to-speech</button>
-                            <button class="option-btn" data-question="4" data-value="no">No, display text only</button>
+                            <button class="option-btn btn btn-secondary" data-question="4" data-value="yes">Yes, enable text-to-speech</button>
+                            <button class="option-btn btn btn-secondary" data-question="4" data-value="no">No, display text only</button>
                         </div>
                     </div>
                     <div class="quiz-image-wrapper">
@@ -97,9 +99,9 @@
                         <h2 class="question-number">Question 5</h2>
                         <p class="question-prompt">What kind of interface style do you find most comfortable?</p>
                         <div class="options">
-                            <button class="option-btn" data-question="5" data-value="calm">Calm and minimal</button>
-                            <button class="option-btn" data-question="5" data-value="bright">Bright and engaging</button>
-                            <button class="option-btn" data-question="5" data-value="modern">Modern and futuristic</button>
+                            <button class="option-btn btn btn-secondary" data-question="5" data-value="calm">Calm and minimal</button>
+                            <button class="option-btn btn btn-secondary" data-question="5" data-value="bright">Bright and engaging</button>
+                            <button class="option-btn btn btn-secondary" data-question="5" data-value="modern">Modern and futuristic</button>
                         </div>
                     </div>
                     <div class="quiz-image-wrapper">

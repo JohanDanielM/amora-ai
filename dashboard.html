@@ -8,7 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/src/styles/design-tokens.css">
     <link rel="stylesheet" href="/src/styles/main.css">
+    <script src="/src/scripts/toast.js"></script>
+    <script src="/src/scripts/lightbox.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
     <style>
         /* Dashboard Page Styles */
         .dashboard-page {
@@ -426,6 +433,130 @@
             box-shadow: 0 8px 20px rgba(107, 91, 149, 0.3);
         }
 
+        /* TTS Custom Controls Styling */
+        .tts-controls-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            width: 100%;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.65);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(107, 91, 149, 0.1);
+        }
+        .tts-control-row {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .tts-control-row label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #6B5B95;
+            display: flex;
+            justify-content: space-between;
+        }
+        .tts-control-row label span.val-display {
+            color: #8B7AA8;
+            font-weight: 500;
+        }
+        .tts-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid rgba(107, 91, 149, 0.2);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            color: #333;
+            background: white;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .tts-select:focus {
+            border-color: #6B5B95;
+        }
+        .tts-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(107, 91, 149, 0.2);
+            outline: none;
+        }
+        .tts-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #6B5B95;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+        .tts-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        .tts-buttons-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        .tts-helper-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 0.2rem;
+            font-weight: 400;
+        }
+
+        /* Text to Image Custom Styles */
+        .ttoi-history-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: 2px solid rgba(107, 91, 149, 0.15);
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ttoi-history-item:hover {
+            transform: scale(1.08);
+            border-color: #6B5B95;
+            box-shadow: 0 4px 12px rgba(107, 91, 149, 0.25);
+        }
+
+        /* STT Red Pulse Animation */
+        @keyframes sttRedPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 12px rgba(231, 76, 60, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+            }
+        }
+        .stt-recording-active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+            animation: sttRedPulse 1.5s infinite !important;
+        }
+        @keyframes micPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .stt-mic-pulse {
+            animation: micPulse 1s infinite;
+            display: inline-block;
+        }
+
         /* Games Tab */
         .games-grid {
             display: grid;
@@ -601,47 +732,20 @@
             }
         }
 
-        .support-options {
+        .support-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
             margin-top: 2rem;
         }
 
-        .support-option {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 15px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(107, 91, 149, 0.1);
-            transition: all 0.3s ease;
-            cursor: pointer;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .support-option:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(107, 91, 149, 0.2);
-        }
-
-        .support-option-icon {
-            font-size: 2rem;
-            color: #6B5B95;
-            margin-bottom: 1rem;
-        }
-
-        .support-option-title {
-            font-family: 'Poppins', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #6B5B95;
-            margin: 0 0 0.5rem;
-        }
-
-        .support-option-desc {
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-            color: #666;
-            margin: 0;
+        .support-message {
+            animation: slideUp 0.4s ease;
         }
 
         /* Responsive Design */
@@ -703,9 +807,44 @@
                 font-size: 1.8rem;
             }
         }
+
+
+        .dashboard-page {
+            padding-top: 3.5rem;
+        }
     </style>
 </head>
 <body>
+    <!-- Premium User Info Bar -->
+    <div class="user-bar">
+      <div class="brand-area">
+        <div class="brand-logo">
+          <span class="brand-icon">✨</span>
+          <span class="brand-text">AMORA<span class="brand-dot">.</span>AI</span>
+        </div>
+      </div>
+      
+      <div class="user-area">
+        <div class="user-info">
+          <div class="user-avatar-wrapper">
+            <div id="user-avatar" class="avatar-circle">A</div>
+          </div>
+          <div class="user-details">
+            <span id="user-name" class="user-name">Loading...</span>
+            <span class="user-status">Online</span>
+          </div>
+        </div>
+        <button onclick="logout()" class="btn-logout" aria-label="Logout">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+
     <div class="dashboard-page">
         <!-- Floating Background Elements -->
         <div class="bg-element"></div>
@@ -715,46 +854,50 @@
 
         <div class="dashboard-container">
             <!-- Header -->
-            <header class="dashboard-header">
-                <h1 class="dashboard-title">AMORA.AI Dashboard</h1>
-                <p class="dashboard-subtitle">Explore our AI-powered features and tools</p>
-            </header>
+            <div class="dashboard-greeting">
+                <h1 class="greeting-title">
+                    Welcome back, <span id="user-greeting-name">there</span> 👋
+                </h1>
+                <p class="greeting-subtitle">
+                    Explore AI-powered tools to boost your creativity and productivity
+                </p>
+            </div>
 
             <!-- Tab Navigation -->
-            <nav class="tab-navigation">
+            <nav class="tab-navigation tab-nav">
                 <ul class="tab-nav-list">
                     <li class="tab-nav-item">
-                        <button class="tab-nav-btn active" data-tab="text-to-speech">
+                        <button class="tab-nav-btn tab-button active" data-tab="text-to-speech">
                             <i class="fas fa-volume-up"></i>Text to Speech
                         </button>
                     </li>
                     <li class="tab-nav-item">
-                        <button class="tab-nav-btn" data-tab="text-to-image">
+                        <button class="tab-nav-btn tab-button" data-tab="text-to-image">
                             <i class="fas fa-image"></i>Text to Image
                         </button>
                     </li>
                     <li class="tab-nav-item">
-                        <button class="tab-nav-btn" data-tab="voice-to-text">
+                        <button class="tab-nav-btn tab-button" data-tab="voice-to-text">
                             <i class="fas fa-microphone"></i>Voice to Text
                         </button>
                     </li>
                     <li class="tab-nav-item">
-                        <button class="tab-nav-btn" data-tab="games">
+                        <button class="tab-nav-btn tab-button" data-tab="games">
                             <i class="fas fa-gamepad"></i>Games
                         </button>
                     </li>
                     <li class="tab-nav-item">
-                        <button class="tab-nav-btn" data-tab="image-creation">
+                        <button class="tab-nav-btn tab-button" data-tab="image-creation">
                             <i class="fas fa-palette"></i>Image Creation
                         </button>
                     </li>
                     <li class="tab-nav-item">
-                        <button class="tab-nav-btn" data-tab="work-schedule">
+                        <button class="tab-nav-btn tab-button" data-tab="work-schedule">
                             <i class="fas fa-calendar-alt"></i>Work Schedule
                         </button>
                     </li>
                     <li class="tab-nav-item">
-                        <button class="tab-nav-btn" data-tab="emotional-support">
+                        <button class="tab-nav-btn tab-button" data-tab="emotional-support">
                             <i class="fas fa-heart"></i>Emotional Support
                         </button>
                     </li>
@@ -765,181 +908,464 @@
             <!-- Tab Content -->
             <div class="tab-content">
                 <!-- Text to Speech Tab -->
-                <div class="tab-pane active" id="text-to-speech">
+                <div class="tab-pane tab-content active" id="text-to-speech">
                     <div class="tab-header">
                         <h2 class="tab-title">Text to Speech</h2>
                         <p class="tab-description">Convert your written text into natural-sounding speech with customizable voices and settings.</p>
                     </div>
                     <div class="text-to-speech-content">
                         <div class="tool-preview">
-                            <textarea class="tool-input" placeholder="Enter your text here..." rows="4">Welcome to AMORA.AI! Transform your text into speech with our advanced AI technology.</textarea>
-                            <button class="tool-btn" onclick="speakText()">
-                                <i class="fas fa-play"></i> Speak Text
-                            </button>
-                        </div>
-                        <div class="feature-grid">
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-cogs"></i>
+                            <textarea class="tool-input textarea" id="tts-input" placeholder="Enter text to convert to speech..." rows="4">Welcome to AMORA.AI! Transform your text into speech with our advanced AI technology.</textarea>
+                            
+                            <div class="tts-controls-panel">
+                                <div class="tts-control-row">
+                                    <label for="tts-voice">Choose Voice</label>
+                                    <select id="tts-voice" class="tts-select select">
+                                        <option value="">Detecting voices...</option>
+                                    </select>
                                 </div>
-                                <h3 class="feature-title">Voice Customization</h3>
-                                <p class="feature-description">Choose from multiple AI voices with adjustable speed, pitch, and tone.</p>
-                                <a href="ttos.html" class="feature-btn">Try Full Tool</a>
+                                
+                                <datalist id="tts-ticks">
+                                    <option value="1.0"></option>
+                                </datalist>
+
+                                <div class="tts-control-row">
+                                    <label for="tts-speed">Speed: <span class="val-display" id="tts-speed-val">1.0x</span></label>
+                                    <input type="range" id="tts-speed" class="tts-slider" min="0.5" max="2" step="0.1" value="1" list="tts-ticks">
+                                    <span class="tts-helper-text">How fast the voice speaks (0.5 = slow, 2.0 = fast)</span>
+                                </div>
+                                <div class="tts-control-row">
+                                    <label for="tts-pitch">Pitch: <span class="val-display" id="tts-pitch-val">1.0</span></label>
+                                    <input type="range" id="tts-pitch" class="tts-slider" min="0" max="2" step="0.1" value="1" list="tts-ticks">
+                                    <span class="tts-helper-text">How high/low the voice sounds (0 = deep, 2 = high)</span>
+                                </div>
+                                <div class="tts-control-row">
+                                    <label for="tts-volume">Volume: <span class="val-display" id="tts-volume-val">100%</span></label>
+                                    <input type="range" id="tts-volume" class="tts-slider" min="0" max="1" step="0.1" value="1" list="tts-ticks">
+                                    <span class="tts-helper-text">Loudness (0 = mute, 1 = max)</span>
+                                </div>
+
+                                <button type="button" class="tool-btn btn btn-secondary" onclick="resetTTSDefaults()" style="padding: 0.5rem 1rem; font-size: 0.85rem; margin-top: 0.5rem; align-self: flex-end; width: auto; border-radius: 8px;">
+                                    <i class="fas fa-undo"></i> Reset to Default
+                                </button>
                             </div>
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-download"></i>
+
+                            <div class="tts-buttons-container">
+                                <button class="tool-btn btn btn-primary" onclick="speakText()">
+                                    <i class="fas fa-play"></i> Speak
+                                </button>
+                                <div id="tts-waveform" class="waveform" style="display:none; vertical-align:middle; margin-left:1rem;">
+                                    <span></span><span></span><span></span><span></span><span></span>
                                 </div>
-                                <h3 class="feature-title">Download Audio</h3>
-                                <p class="feature-description">Save your generated speech as MP3 files for offline use.</p>
-                                <a href="ttos.html" class="feature-btn">Learn More</a>
+                                <button class="tool-btn btn btn-danger" onclick="stopText()" style="background: var(--color-error); border: none;">
+                                    <i class="fas fa-stop"></i> Stop
+                                </button>
+                                <button class="tool-btn btn btn-secondary" id="tts-download-btn" onclick="downloadAudio()">
+                                    <i class="fas fa-download"></i> Download as Audio
+                                </button>
+                                <button class="tool-btn btn btn-secondary" id="tts-copy-btn" onclick="copyTTSText()">
+                                    <i class="fas fa-copy"></i> Copy Text
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Text to Image Tab -->
-                <div class="tab-pane" id="text-to-image">
+                <div class="tab-pane tab-content" id="text-to-image">
                     <div class="tab-header">
                         <h2 class="tab-title">Text to Image</h2>
                         <p class="tab-description">Generate stunning images from text descriptions using advanced AI image synthesis.</p>
                     </div>
                     <div class="text-to-image-content">
                         <div class="tool-preview">
-                            <input type="text" class="tool-input" placeholder="Describe the image you want to create..." value="A serene mountain landscape at sunset">
-                            <button class="tool-btn" onclick="generateImage()">
+                            <input type="text" id="img-prompt" class="tool-input input" placeholder="Describe the image you want to create (3-500 chars)..." value="A serene mountain landscape at sunset" style="margin-bottom: 0.25rem;">
+                            <span id="char-count" style="display:block; text-align:right; font-size:12px; color:var(--color-neutral-500); margin-bottom:1rem;">37 / 500</span>
+                            
+                            <div class="ttoi-controls" style="margin-bottom: 1.5rem; text-align: left; display: flex; flex-direction: column; gap: 0.5rem;">
+                                <label for="img-style" style="font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; color: #6B5B95;">Choose Style</label>
+                                <select id="img-style" class="tts-select select">
+                                    <option value="">None (Default)</option>
+                                    <option value="Realistic">Realistic</option>
+                                    <option value="Anime">Anime</option>
+                                    <option value="Abstract">Abstract</option>
+                                    <option value="Oil Painting">Oil Painting</option>
+                                    <option value="Cyberpunk">Cyberpunk</option>
+                                    <option value="Watercolor">Watercolor</option>
+                                    <option value="Photorealistic">Photorealistic</option>
+                                    <option value="Cartoon">Cartoon</option>
+                                </select>
+                            </div>
+
+                            <button class="tool-btn btn btn-primary" id="generate-img-btn" onclick="generateImage()" style="margin-bottom: 1.5rem; width: 100%;">
                                 <i class="fas fa-magic"></i> Generate Image
                             </button>
-                        </div>
-                        <div class="feature-grid">
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-palette"></i>
-                                </div>
-                                <h3 class="feature-title">Multiple Styles</h3>
-                                <p class="feature-description">Choose from various art styles including realistic, anime, and abstract.</p>
-                                <a href="ttoi.html" class="feature-btn">Try Full Tool</a>
+
+                            <!-- Loading indicator -->
+                            <div id="img-loading" style="display:none; font-family: 'Poppins', sans-serif; padding: 2rem; text-align: center; color: #6B5B95;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 1rem; color: #6B5B95;"></i>
+                                <p style="margin: 0; font-weight: 500;">Generating your image... (10-30 seconds)</p>
                             </div>
-                            <div class="feature-card">
-                                <div class="feature-icon">
-                                    <i class="fas fa-share"></i>
+
+                            <!-- Error alert banner -->
+                            <div id="img-error" class="form-error-banner" style="margin-bottom: 1.5rem; display:none;"></div>
+
+                            <!-- Image Preview & Actions Area -->
+                            <div id="img-result-container" style="display:none; margin-top: 1.5rem; flex-direction: column; align-items: center; gap: 1.25rem;">
+                                <img id="img-preview" src="" alt="Generated AI Image" style="max-width: 100%; border-radius: 15px; border: 2px solid rgba(107, 91, 149, 0.2); box-shadow: 0 10px 30px rgba(107, 91, 149, 0.15); object-fit: cover;">
+                                
+                                <div class="tts-buttons-container">
+                                    <button class="tool-btn btn btn-secondary" onclick="downloadImageFile()">
+                                        <i class="fas fa-download"></i> Download PNG
+                                    </button>
+                                    <button class="tool-btn btn btn-secondary" onclick="imageToPDF()" aria-label="Save generated image as PDF document">
+                                        <i class="fas fa-file-pdf"></i> Save as PDF
+                                    </button>
+                                    <button class="tool-btn btn btn-secondary" id="img-share-btn" onclick="shareImage()">
+                                        <i class="fas fa-share-alt"></i> Share Image
+                                    </button>
                                 </div>
-                                <h3 class="feature-title">Easy Sharing</h3>
-                                <p class="feature-description">Share your creations directly to social media platforms.</p>
-                                <a href="ttoi.html" class="feature-btn">Learn More</a>
+                            </div>
+
+                            <!-- History Section -->
+                            <div class="ttoi-history-panel" style="margin-top: 2rem; border-top: 1px solid rgba(107, 91, 149, 0.1); padding-top: 1.5rem; text-align: left;">
+                                <h4 style="font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 700; color: #6B5B95; margin: 0 0 1rem;">Recent Generations</h4>
+                                <div id="img-history-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem;">
+                                    <!-- History item previews will go here -->
+                                    <div id="img-history-empty" class="empty-state" style="grid-column: 1 / -1;">
+                                      <div class="empty-state-icon">🎨</div>
+                                      <div class="empty-state-title">No images yet</div>
+                                      <div class="empty-state-text">Generate your first AI image above and it will appear here</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Voice to Text Tab -->
-                <div class="tab-pane" id="voice-to-text">
+                <div class="tab-pane tab-content" id="voice-to-text">
                     <div class="tab-header">
                         <h2 class="tab-title">Voice to Text</h2>
                         <p class="tab-description">Convert spoken words into written text with high accuracy using advanced speech recognition.</p>
                     </div>
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-microphone"></i>
+                    <div class="text-to-speech-content" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                        <div class="tool-preview" style="max-width: 700px;">
+                            
+                            <!-- Control Panel -->
+                            <div class="tts-controls-panel" style="margin-bottom: 1.5rem;">
+                                <div class="tts-control-row">
+                                    <label for="stt-lang">Select Language</label>
+                                    <select id="stt-lang" class="tts-select select" aria-label="Transcription Language">
+                                        <option value="en-US">🇺🇸 English</option>
+                                        <option value="hi-IN">🇮🇳 Hindi</option>
+                                        <option value="es-ES">🇪🇸 Spanish</option>
+                                        <option value="fr-FR">🇫🇷 French</option>
+                                        <option value="de-DE">🇩🇪 German</option>
+                                        <option value="ja-JP">🇯🇵 Japanese</option>
+                                        <option value="zh-CN">🇨🇳 Chinese</option>
+                                        <option value="ar-SA">🇸🇦 Arabic</option>
+                                    </select>
+                                </div>
+                                <div class="tts-control-row" style="margin-top: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span style="font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; color: #6B5B95;">Status:</span>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <div id="stt-recording-dot" class="recording-dot" style="display: none;"></div>
+                                        <span id="stt-status" aria-live="polite" style="font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 500; color: #8B7AA8;">Click Start to begin</span>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 class="feature-title">Real-time Transcription</h3>
-                            <p class="feature-description">Get instant text conversion as you speak with live transcription.</p>
-                            <button class="feature-btn" onclick="startVoiceRecognition()">Start Recording</button>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-language"></i>
+
+                            <!-- Live Transcript Display Frame -->
+                            <div style="width: 100%; min-height: 180px; padding: 1.25rem; border: 2px solid rgba(107, 91, 149, 0.2); border-radius: 15px; background: rgba(255, 255, 255, 0.7); text-align: left; margin-bottom: 1.5rem; position: relative; box-sizing: border-box;">
+                                <div id="stt-empty" class="empty-state">
+                                  <div class="empty-state-icon">🎤</div>
+                                  <div class="empty-state-title">Ready to listen</div>
+                                  <div class="empty-state-text">Click Start Recording above to begin transcribing your speech</div>
+                                </div>
+                                <div id="stt-final" style="font-family: 'Poppins', sans-serif; font-size: 1rem; color: #333; line-height: 1.6; white-space: pre-wrap; display: inline;"></div>
+                                <div id="stt-interim" style="font-family: 'Poppins', sans-serif; font-size: 1rem; color: #888; font-style: italic; display: inline; line-height: 1.6;"></div>
+                                
+                                <div style="position: absolute; bottom: 0.5rem; right: 1rem; font-family: 'Poppins', sans-serif; font-size: 0.8rem; color: #999;">
+                                    Words: <span id="stt-word-count">0</span>
+                                </div>
                             </div>
-                            <h3 class="feature-title">Multi-language Support</h3>
-                            <p class="feature-description">Supports multiple languages and accents for global accessibility.</p>
-                            <button class="feature-btn">Coming Soon</button>
-                        </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-file-alt"></i>
+
+                            <!-- Action Buttons -->
+                            <div class="tts-buttons-container">
+                                <button class="tool-btn btn btn-primary" id="stt-start" onclick="startVoiceRecognition()" aria-label="Start Voice Recording">
+                                    <i class="fas fa-microphone" id="stt-mic-icon"></i> Start Recording
+                                </button>
+                                <button class="tool-btn btn btn-danger" id="stt-stop" onclick="stopVoiceRecognition()" disabled aria-label="Stop Voice Recording" style="background: var(--color-error); border: none;">
+                                    <i class="fas fa-stop"></i> Stop
+                                </button>
+                                <button class="tool-btn btn btn-secondary" id="stt-clear" onclick="clearVoiceTranscript()" aria-label="Clear Transcript">
+                                    <i class="fas fa-trash-alt"></i> Clear
+                                </button>
+                                <button class="tool-btn btn btn-secondary" id="stt-copy" onclick="copyVoiceTranscript()" aria-label="Copy Transcript to Clipboard">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                                <button class="tool-btn btn btn-secondary" id="stt-export" onclick="exportVoiceTranscript()" aria-label="Export Transcript as TXT File">
+                                    <i class="fas fa-file-export"></i> Export TXT
+                                </button>
+                                <button class="tool-btn btn btn-secondary" id="stt-export-pdf" onclick="exportVoiceTranscriptAsPDF()" aria-label="Export Transcript as PDF File">
+                                    <i class="fas fa-file-pdf"></i> Export PDF
+                                </button>
+                                <button class="tool-btn btn btn-secondary" id="stt-export-doc" onclick="exportVoiceTranscriptAsDOC()" aria-label="Export Transcript as DOC File">
+                                    <i class="fas fa-file-word"></i> Export DOC
+                                </button>
                             </div>
-                            <h3 class="feature-title">Export Options</h3>
-                            <p class="feature-description">Export transcriptions in various formats including TXT, DOC, and PDF.</p>
-                            <button class="feature-btn">Coming Soon</button>
+
                         </div>
                     </div>
                 </div>
 
                 <!-- Games Tab -->
-                <div class="tab-pane" id="games">
+                <div class="tab-pane tab-content" id="games">
                     <div class="tab-header">
                         <h2 class="tab-title">AI-Powered Games</h2>
                         <p class="tab-description">Engage with interactive games designed to enhance creativity and problem-solving skills.</p>
                     </div>
                     <div class="games-grid">
-                        <div class="game-card" onclick="openGame('word-association')">
+                        <div class="game-card card card-hover" data-game="word" onclick="location.href='/games/word-association.html'">
                             <div class="game-icon">
                                 <i class="fas fa-brain"></i>
                             </div>
                             <h3 class="game-title">Word Association</h3>
                             <p class="game-description">Build creative connections between words and concepts.</p>
+                            <button class="feature-btn btn btn-primary" style="margin-top: 1rem; width: 100%;">Play Now</button>
                         </div>
-                        <div class="game-card" onclick="openGame('story-builder')">
+                        <div class="game-card card card-hover" data-game="story" onclick="location.href='/games/story-builder.html'">
                             <div class="game-icon">
                                 <i class="fas fa-book"></i>
                             </div>
                             <h3 class="game-title">Story Builder</h3>
                             <p class="game-description">Create interactive stories with AI assistance.</p>
+                            <button class="feature-btn btn btn-primary" style="margin-top: 1rem; width: 100%;">Play Now</button>
                         </div>
-                        <div class="game-card" onclick="openGame('puzzle-solver')">
+                        <div class="game-card card card-hover" data-game="puzzle" onclick="location.href='/games/puzzle-solver.html'">
                             <div class="game-icon">
                                 <i class="fas fa-puzzle-piece"></i>
                             </div>
                             <h3 class="game-title">Puzzle Solver</h3>
                             <p class="game-description">Solve complex puzzles with AI hints and guidance.</p>
+                            <button class="feature-btn btn btn-primary" style="margin-top: 1rem; width: 100%;">Play Now</button>
                         </div>
-                        <div class="game-card" onclick="openGame('memory-challenge')">
+                        <div class="game-card card card-hover" data-game="memory" onclick="location.href='/games/memory-challenge.html'">
                             <div class="game-icon">
                                 <i class="fas fa-memory"></i>
                             </div>
                             <h3 class="game-title">Memory Challenge</h3>
                             <p class="game-description">Test and improve your memory with AI-generated challenges.</p>
+                            <button class="feature-btn btn btn-primary" style="margin-top: 1rem; width: 100%;">Play Now</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Image Creation Tab -->
-                <div class="tab-pane" id="image-creation">
+                <div class="tab-pane tab-content" id="image-creation">
                     <div class="tab-header">
                         <h2 class="tab-title">Advanced Image Creation</h2>
                         <p class="tab-description">Create, edit, and enhance images with professional-grade AI tools.</p>
                     </div>
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-wand-magic-sparkles"></i>
+                    
+                    <!-- Advanced Tool Selector Buttons -->
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap;">
+                        <button class="tool-btn btn btn-primary" id="btn-subtab-editor" onclick="switchImageSubTab('editor')" style="width: auto;" title="Upload an image and describe edits to apply">
+                            <i class="fas fa-wand-magic-sparkles"></i> AI Image Editor
+                        </button>
+                        <button class="tool-btn btn btn-secondary" id="btn-subtab-style" onclick="switchImageSubTab('style')" style="width: auto;" title="Draw custom prompts in the style of famous art masterpieces">
+                            <i class="fas fa-filter"></i> Style Transfer
+                        </button>
+                        <button class="tool-btn btn btn-secondary" id="btn-subtab-batch" onclick="switchImageSubTab('batch')" style="width: auto;" title="Process multiple prompts sequentially into a download ZIP batch">
+                            <i class="fas fa-images"></i> Batch Processing
+                        </button>
+                    </div>
+
+                    <!-- SUB-TAB 1: AI IMAGE EDITOR -->
+                    <!-- SUB-TAB 1: AI IMAGE EDITOR -->
+                    <div class="image-subtab-pane" id="subtab-editor" style="display: block; max-width: 700px; margin: 0 auto;">
+                        <div class="tool-preview">
+                            <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; color: #6B5B95; margin: 0 0 1rem; text-align: left;">
+                                <i class="fas fa-wand-magic-sparkles"></i> AI Image Reimagining
+                            </h3>
+                            <p style="font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #666; margin-bottom: 1.5rem; text-align: left;">
+                                Upload a reference image and describe what to change. A new image will be created reimagining your description!
+                            </p>
+
+                            <div class="tts-controls-panel">
+                                <div class="tts-control-row">
+                                    <label for="editor-file-input">Upload Base Image</label>
+                                    <input type="file" id="editor-file-input" accept="image/*" class="tts-select input" onchange="previewEditorUpload(event)" aria-label="Base reference image upload">
+                                </div>
+                                <div id="editor-upload-preview-container" style="display: none; margin-top: 1rem; text-align: center;">
+                                    <p style="font-family: 'Poppins', sans-serif; font-size: 0.85rem; font-weight: 600; color: #6B5B95; margin-bottom: 0.5rem;">Uploaded Reference:</p>
+                                    <img id="editor-upload-preview" src="" alt="Upload Preview" style="max-height: 150px; border-radius: 8px; border: 1px solid rgba(107, 91, 149, 0.2);">
+                                </div>
+                                <div class="tts-control-row" style="margin-top: 1rem;">
+                                    <label for="editor-prompt-input">Describe the Edit</label>
+                                    <input type="text" id="editor-prompt-input" class="tts-select input" placeholder="e.g. add sunset, make it winter, change color to blue..." aria-label="Edit description text input">
+                                </div>
                             </div>
-                            <h3 class="feature-title">AI Image Editor</h3>
-                            <p class="feature-description">Edit existing images with AI-powered tools for enhancement and modification.</p>
-                            <button class="feature-btn">Coming Soon</button>
+
+                            <button class="tool-btn btn btn-primary" id="apply-edit-btn" onclick="applyImageEdit()" style="margin-top: 1.5rem; width: 100%;" aria-label="Apply edit description">
+                                <i class="fas fa-magic"></i> Apply Edit
+                            </button>
+
+                            <!-- Loading -->
+                            <div id="editor-loading" style="display:none; padding: 2rem; text-align: center; color: #6B5B95;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                                <p style="margin: 0; font-weight: 500;">Reimagining your image... (5-15 seconds)</p>
+                            </div>
+
+                            <div id="editor-error" class="form-error-banner" style="margin-top: 1rem; display:none;"></div>
+
+                            <!-- Side-by-Side Results -->
+                            <div id="editor-result-container" style="display:none; margin-top: 2rem; flex-direction: column; align-items: center; gap: 1.25rem;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: 100%;">
+                                    <div style="text-align: center;">
+                                        <p style="font-size: 0.85rem; font-weight: 600; color: #666; margin-bottom: 0.5rem;">Original (Before)</p>
+                                        <img id="editor-before-img" src="" alt="Before" style="width: 100%; border-radius: 10px; border: 1px solid #ddd; object-fit: cover;">
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <p style="font-size: 0.85rem; font-weight: 600; color: #6B5B95; margin-bottom: 0.5rem;">Reimagined (After)</p>
+                                        <img id="editor-after-img" src="" alt="After" style="width: 100%; border-radius: 10px; border: 2px solid #6B5B95; object-fit: cover;">
+                                    </div>
+                                </div>
+                                <button class="tool-btn btn btn-secondary" onclick="downloadEditorImage()" aria-label="Download edited image PNG">
+                                    <i class="fas fa-download"></i> Download Edited Image
+                                </button>
+                            </div>
                         </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-images"></i>
+                    </div>
+
+                    <!-- SUB-TAB 2: STYLE TRANSFER -->
+                    <div class="image-subtab-pane" id="subtab-style" style="display: none; max-width: 700px; margin: 0 auto;">
+                        <div class="tool-preview">
+                            <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; color: #6B5B95; margin: 0 0 1rem; text-align: left;">
+                                <i class="fas fa-filter"></i> Style Transfer
+                            </h3>
+                            <p style="font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #666; margin-bottom: 1.5rem; text-align: left;">
+                                Describe what you want to draw, pick a famous artist or paint style, and see it rendered immediately!
+                            </p>
+
+                            <div class="tts-controls-panel">
+                                <div class="tts-control-row">
+                                    <label for="style-prompt-input">Describe Your Image</label>
+                                    <input type="text" id="style-prompt-input" class="tts-select input" placeholder="e.g. a serene house on a hill, a cute cat sleeping..." aria-label="Image prompt description input">
+                                </div>
+                                <div class="tts-control-row" style="margin-top: 1rem;">
+                                    <label>Select Artistic Style</label>
+                                    
+                                    <!-- Interactive Style Grid -->
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 0.5rem; width: 100%;">
+                                        <div class="style-choice-item active" onclick="selectStyleChoice(this, 'Van Gogh')" style="border: 2px solid #6B5B95; background: rgba(107, 91, 149, 0.08); border-radius: 10px; padding: 0.6rem 0.25rem; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #6B5B95; transition: all 0.2s;">
+                                            Van Gogh
+                                        </div>
+                                        <div class="style-choice-item" onclick="selectStyleChoice(this, 'Picasso')" style="border: 2px solid rgba(107, 91, 149, 0.15); border-radius: 10px; padding: 0.6rem 0.25rem; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; transition: all 0.2s;">
+                                            Picasso
+                                        </div>
+                                        <div class="style-choice-item" onclick="selectStyleChoice(this, 'Monet')" style="border: 2px solid rgba(107, 91, 149, 0.15); border-radius: 10px; padding: 0.6rem 0.25rem; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; transition: all 0.2s;">
+                                            Monet
+                                        </div>
+                                        <div class="style-choice-item" onclick="selectStyleChoice(this, 'Watercolor')" style="border: 2px solid rgba(107, 91, 149, 0.15); border-radius: 10px; padding: 0.6rem 0.25rem; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; transition: all 0.2s;">
+                                            Watercolor
+                                        </div>
+                                        <div class="style-choice-item" onclick="selectStyleChoice(this, 'Pencil Sketch')" style="border: 2px solid rgba(107, 91, 149, 0.15); border-radius: 10px; padding: 0.6rem 0.25rem; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; transition: all 0.2s;">
+                                            Pencil Sketch
+                                        </div>
+                                        <div class="style-choice-item" onclick="selectStyleChoice(this, 'Anime')" style="border: 2px solid rgba(107, 91, 149, 0.15); border-radius: 10px; padding: 0.6rem 0.25rem; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; transition: all 0.2s;">
+                                            Anime
+                                        </div>
+                                        <div class="style-choice-item" onclick="selectStyleChoice(this, 'Oil Painting')" style="border: 2px solid rgba(107, 91, 149, 0.15); border-radius: 10px; padding: 0.6rem 0.25rem; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; transition: all 0.2s;">
+                                            Oil Painting
+                                        </div>
+                                        <div class="style-choice-item" onclick="selectStyleChoice(this, 'Cyberpunk')" style="border: 2px solid rgba(107, 91, 149, 0.15); border-radius: 10px; padding: 0.6rem 0.25rem; text-align: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #666; transition: all 0.2s;">
+                                            Cyberpunk
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="selected-art-style" value="Van Gogh">
+                                </div>
                             </div>
-                            <h3 class="feature-title">Batch Processing</h3>
-                            <p class="feature-description">Process multiple images simultaneously with automated enhancements.</p>
-                            <button class="feature-btn">Coming Soon</button>
+
+                            <button class="tool-btn btn btn-primary" id="apply-style-btn" onclick="applyArtStyle()" style="margin-top: 1.5rem; width: 100%;" aria-label="Apply custom art style to description">
+                                <i class="fas fa-magic"></i> Apply Style
+                            </button>
+
+                            <!-- Loading -->
+                            <div id="style-loading" style="display:none; padding: 2rem; text-align: center; color: #6B5B95;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                                <p style="margin: 0; font-weight: 500;">Applying style... (5-15 seconds)</p>
+                            </div>
+
+                            <div id="style-error" class="form-error-banner" style="margin-top: 1rem; display:none;"></div>
+
+                            <!-- Style Result Area -->
+                            <div id="style-result-container" style="display:none; margin-top: 2rem; flex-direction: column; align-items: center; gap: 1.25rem;">
+                                <img id="style-preview" src="" alt="Styled Art Image" style="max-width: 100%; border-radius: 15px; border: 2px solid rgba(107, 91, 149, 0.2); box-shadow: 0 10px 30px rgba(107, 91, 149, 0.15);">
+                                <button class="tool-btn btn btn-secondary" onclick="downloadStyleImage()" aria-label="Download generated style transfer image PNG">
+                                    <i class="fas fa-download"></i> Download Masterpiece
+                                </button>
+                            </div>
                         </div>
-                        <div class="feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-filter"></i>
+                    </div>
+
+                    <!-- SUB-TAB 3: BATCH PROCESSING -->
+                    <div class="image-subtab-pane" id="subtab-batch" style="display: none; max-width: 700px; margin: 0 auto;">
+                        <div class="tool-preview">
+                            <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 700; color: #6B5B95; margin: 0 0 1rem; text-align: left;">
+                                <i class="fas fa-images"></i> Batch Processing
+                            </h3>
+                            <p style="font-family: 'Poppins', sans-serif; font-size: 0.85rem; color: #666; margin-bottom: 1.5rem; text-align: left;">
+                                Enter up to 5 prompts (one per line). AMORA will process them sequentially to create a batch!
+                            </p>
+
+                            <div class="tts-controls-panel">
+                                <div class="tts-control-row">
+                                    <label for="batch-prompts-input">Enter Prompts (one per line, max 5)</label>
+                                    <textarea id="batch-prompts-input" class="tool-input textarea" placeholder="e.g.&#10;A cute cat&#10;A futuristic city&#10;A peaceful cabin in the woods" rows="4" aria-label="Batch image prompts (one per line, maximum five)"></textarea>
+                                </div>
+                                <div class="tts-control-row" style="margin-top: 1rem;">
+                                    <label for="batch-style-select">Choose Style</label>
+                                    <select id="batch-style-select" class="tts-select select" aria-label="Art style for batch creation">
+                                        <option value="">No Special Style</option>
+                                        <option value="realistic">Realistic</option>
+                                        <option value="anime">Anime</option>
+                                        <option value="oil painting">Oil Painting</option>
+                                        <option value="cyberpunk">Cyberpunk</option>
+                                        <option value="watercolor">Watercolor</option>
+                                        <option value="pencil sketch">Pencil Sketch</option>
+                                    </select>
+                                </div>
                             </div>
-                            <h3 class="feature-title">Style Transfer</h3>
-                            <p class="feature-description">Apply artistic styles from famous paintings to your photos.</p>
-                            <button class="feature-btn">Coming Soon</button>
+
+                            <button class="tool-btn btn btn-primary" id="generate-batch-btn" onclick="generateImageBatch()" style="margin-top: 1.5rem; width: 100%;" aria-label="Generate all batch prompts">
+                                <i class="fas fa-magic"></i> Generate All
+                            </button>
+
+                            <!-- Loading -->
+                            <div id="batch-loading" style="display:none; padding: 2rem; text-align: center; color: #6B5B95;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                                <p style="margin: 0; font-weight: 500;" id="batch-progress-text">Generating batch... (0 of 0)</p>
+                            </div>
+
+                            <div id="batch-error" class="form-error-banner" style="margin-top: 1rem; display:none;"></div>
+
+                            <!-- Batch Results Area -->
+                            <div id="batch-result-container" style="display:none; margin-top: 2rem; flex-direction: column; align-items: center; gap: 1.5rem;">
+                                <div id="batch-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; width: 100%;">
+                                    <!-- Images will be generated and placed here -->
+                                </div>
+                                <button class="tool-btn btn btn-secondary" onclick="downloadBatchAsZip()" aria-label="Download generated batch images as a single ZIP file">
+                                    <i class="fas fa-file-archive"></i> Download All as ZIP
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Work Schedule Tab -->
-                <div class="tab-pane" id="work-schedule">
+                <div class="tab-pane tab-content" id="work-schedule">
                     <div class="tab-header">
                         <h2 class="tab-title">Work Schedule Assistant</h2>
                         <p class="tab-description">Organize your tasks and manage your time effectively with AI-powered scheduling.</p>
@@ -947,24 +1373,24 @@
                     <div class="schedule-container">
                         <div class="schedule-header">
                             <h3 class="schedule-title">Today's Tasks</h3>
-                            <button class="add-task-btn" onclick="addNewTask()">
+                            <button class="add-task-btn btn btn-primary" onclick="addNewTask()">
                                 <i class="fas fa-plus"></i> Add Task
                             </button>
                         </div>
                         <div class="schedule-list">
-                            <div class="schedule-item">
+                            <div class="schedule-item card">
                                 <h4 class="schedule-item-title">Review project proposal</h4>
                                 <p class="schedule-item-time">9:00 AM - 10:30 AM</p>
                             </div>
-                            <div class="schedule-item">
+                            <div class="schedule-item card">
                                 <h4 class="schedule-item-title">Team meeting</h4>
                                 <p class="schedule-item-time">11:00 AM - 12:00 PM</p>
                             </div>
-                            <div class="schedule-item">
+                            <div class="schedule-item card">
                                 <h4 class="schedule-item-title">Code review session</h4>
                                 <p class="schedule-item-time">2:00 PM - 3:30 PM</p>
                             </div>
-                            <div class="schedule-item">
+                            <div class="schedule-item card">
                                 <h4 class="schedule-item-title">Client presentation prep</h4>
                                 <p class="schedule-item-time">4:00 PM - 5:00 PM</p>
                             </div>
@@ -973,7 +1399,7 @@
                 </div>
 
                 <!-- Emotional Support Tab -->
-                <div class="tab-pane" id="emotional-support">
+                <div class="tab-pane tab-content" id="emotional-support">
                     <div class="tab-header">
                         <h2 class="tab-title">Emotional Support</h2>
                         <p class="tab-description">Find comfort and guidance with our AI companion designed to provide emotional support and mindfulness.</p>
@@ -985,35 +1411,1356 @@
                         <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: #6B5B95; margin: 0 0 1rem;">How are you feeling today?</h3>
                         <p style="font-family: 'Poppins', sans-serif; font-size: 1rem; color: #666; margin: 0 0 2rem;">I'm here to listen and support you. Choose an option below or share what's on your mind.</p>
 
-                        <div class="support-options">
-                            <div class="support-option" onclick="provideSupport('anxious')">
-                                <div class="support-option-icon">
-                                    <i class="fas fa-brain"></i>
-                                </div>
-                                <h4 class="support-option-title">Feeling Anxious</h4>
-                                <p class="support-option-desc">Get calming techniques and mindfulness exercises.</p>
-                            </div>
-                            <div class="support-option" onclick="provideSupport('stressed')">
-                                <div class="support-option-icon">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                </div>
-                                <h4 class="support-option-title">Feeling Stressed</h4>
-                                <p class="support-option-desc">Learn stress management strategies and relaxation methods.</p>
-                            </div>
-                            <div class="support-option" onclick="provideSupport('sad')">
-                                <div class="support-option-icon">
-                                    <i class="fas fa-sad-tear"></i>
-                                </div>
-                                <h4 class="support-option-title">Feeling Sad</h4>
-                                <p class="support-option-desc">Find comfort and ways to boost your mood.</p>
-                            </div>
-                            <div class="support-option" onclick="provideSupport('motivation')">
-                                <div class="support-option-icon">
-                                    <i class="fas fa-rocket"></i>
-                                </div>
-                                <h4 class="support-option-title">Need Motivation</h4>
-                                <p class="support-option-desc">Get inspired with positive affirmations and goal-setting tips.</p>
-                            </div>
+                        <div class="support-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                            <button class="btn btn-secondary" onclick="provideSupport('motivation')" style="padding: 1.5rem; font-size: 1.1rem; border-radius: 15px; width: 100%;">
+                                💪 Motivation
+                            </button>
+                            <button class="btn btn-secondary" onclick="provideSupport('calm')" style="padding: 1.5rem; font-size: 1.1rem; border-radius: 15px; width: 100%;">
+                                🧘 Calm Down
+                            </button>
+                            <button class="btn btn-secondary" onclick="provideSupport('happy')" style="padding: 1.5rem; font-size: 1.1rem; border-radius: 15px; width: 100%;">
+                                😊 Cheer Up
+                            </button>
+                            <button class="btn btn-secondary" onclick="provideSupport('focus')" style="padding: 1.5rem; font-size: 1.1rem; border-radius: 15px; width: 100%;">
+                                🎯 Focus
+                            </button>
+                        </div>
+
+                        <div id="support-message" class="support-message" style="display:none; margin-top: 2rem; padding: 2rem; background: rgba(255, 255, 255, 0.9); border-radius: 15px; box-shadow: 0 10px 30px rgba(107, 91, 149, 0.1); border-left: 4px solid #6B5B95;">
+                            <p id="support-text" style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: #6B5B95; margin: 0; font-weight: 500; font-style: italic;"></p>
                         </div>
                     </div>
                 </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== Fetch Logged-In User ==========
+        // ========== Fetch Logged-In User ==========
+        // Replaced by loadUserInfo() at the bottom of the script
+
+        // ========== Tab Switching Logic ==========
+        const tabButtons = document.querySelectorAll('.tab-nav-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+        const tabIndicator = document.querySelector('.tab-indicator');
+
+        function switchTab(targetTab) {
+            // Deactivate all tabs
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+
+            // Activate target
+            const activeBtn = document.querySelector(`.tab-nav-btn[data-tab="${targetTab}"]`);
+            const activePane = document.getElementById(targetTab);
+            if (activeBtn) activeBtn.classList.add('active');
+            if (activePane) activePane.classList.add('active');
+
+            // Move indicator
+            updateIndicator(activeBtn);
+        }
+
+        function updateIndicator(btn) {
+            if (!btn || !tabIndicator) return;
+            const rect = btn.getBoundingClientRect();
+            const navRect = btn.closest('.tab-navigation').getBoundingClientRect();
+            tabIndicator.style.width = rect.width + 'px';
+            tabIndicator.style.left = (rect.left - navRect.left) + 'px';
+        }
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                switchTab(this.dataset.tab);
+            });
+        });
+
+        // Set initial indicator position
+        window.addEventListener('load', () => {
+            const activeBtn = document.querySelector('.tab-nav-btn.active');
+            if (activeBtn) updateIndicator(activeBtn);
+        });
+
+        // Recalculate indicator on resize
+        window.addEventListener('resize', () => {
+            const activeBtn = document.querySelector('.tab-nav-btn.active');
+            if (activeBtn) updateIndicator(activeBtn);
+        });
+
+        // ========== Text to Speech ==========
+        let ttsMediaRecorder = null;
+        let ttsAudioChunks = [];
+        let ttsStream = null;
+
+        function populateVoices() {
+            if (!('speechSynthesis' in window)) return;
+            const voiceSelect = document.getElementById('tts-voice');
+            if (!voiceSelect) return;
+
+            const voices = window.speechSynthesis.getVoices();
+            voiceSelect.innerHTML = '';
+
+            if (voices.length === 0) {
+                voiceSelect.innerHTML = '<option value="">No voices available (load pending...)</option>';
+                return;
+            }
+
+            voices.forEach(voice => {
+                const option = document.createElement('option');
+                option.value = voice.name;
+                option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' [Default]' : ''}`;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = populateVoices;
+            // Initial call
+            setTimeout(populateVoices, 100);
+        }
+
+        // Image Prompt Character Counter
+        window.addEventListener('DOMContentLoaded', () => {
+            const promptInput = document.getElementById('img-prompt');
+            const charCount = document.getElementById('char-count');
+            if (promptInput && charCount) {
+                promptInput.addEventListener('input', () => {
+                    charCount.textContent = `${promptInput.value.length} / 500`;
+                });
+            }
+        });
+
+        // Live slider updates
+        window.addEventListener('DOMContentLoaded', () => {
+            const speedSlider = document.getElementById('tts-speed');
+            const speedVal = document.getElementById('tts-speed-val');
+            if (speedSlider && speedVal) {
+                speedSlider.addEventListener('input', (e) => {
+                    speedVal.textContent = parseFloat(e.target.value).toFixed(1) + 'x';
+                });
+            }
+
+            const pitchSlider = document.getElementById('tts-pitch');
+            const pitchVal = document.getElementById('tts-pitch-val');
+            if (pitchSlider && pitchVal) {
+                pitchSlider.addEventListener('input', (e) => {
+                    pitchVal.textContent = parseFloat(e.target.value).toFixed(1);
+                });
+            }
+
+            const volumeSlider = document.getElementById('tts-volume');
+            const volumeVal = document.getElementById('tts-volume-val');
+            if (volumeSlider && volumeVal) {
+                volumeSlider.addEventListener('input', (e) => {
+                    volumeVal.textContent = Math.round(parseFloat(e.target.value) * 100) + '%';
+                });
+            }
+        });
+
+        // Trigger populateVoices on load
+        window.addEventListener('load', populateVoices);
+
+        function speakText(onEndCallback) {
+            const text = document.getElementById('tts-input').value.trim();
+            if (!text) {
+                showToast('Please enter some text to speak.', 'warning');
+                if (typeof onEndCallback === 'function') onEndCallback();
+                return;
+            }
+            const wf = document.getElementById('tts-waveform');
+            if (wf) wf.style.display = 'inline-flex';
+            
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // Get chosen voice
+                const voiceSelect = document.getElementById('tts-voice');
+                const selectedVoiceName = voiceSelect ? voiceSelect.value : '';
+                if (selectedVoiceName) {
+                    const voices = window.speechSynthesis.getVoices();
+                    const voice = voices.find(v => v.name === selectedVoiceName);
+                    if (voice) utterance.voice = voice;
+                }
+
+                // Get slider values
+                utterance.rate = parseFloat(document.getElementById('tts-speed').value) || 1.0;
+                utterance.pitch = parseFloat(document.getElementById('tts-pitch').value) || 1.0;
+                utterance.volume = parseFloat(document.getElementById('tts-volume').value) || 1.0;
+
+                utterance.onend = function() {
+                    if (wf) wf.style.display = 'none';
+                    if (typeof onEndCallback === 'function') onEndCallback();
+                };
+                utterance.onerror = function(err) {
+                    if (wf) wf.style.display = 'none';
+                    console.error('SpeechSynthesis error:', err);
+                    if (typeof onEndCallback === 'function') onEndCallback();
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showToast('Sorry, your browser does not support text-to-speech.', 'error');
+                if (typeof onEndCallback === 'function') onEndCallback();
+            }
+        }
+
+        function stopText() {
+            const wf = document.getElementById('tts-waveform');
+            if (wf) wf.style.display = 'none';
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            if (ttsMediaRecorder && ttsMediaRecorder.state !== 'inactive') {
+                ttsMediaRecorder.stop();
+            }
+        }
+
+        function resetTTSDefaults() {
+            const speedSlider = document.getElementById('tts-speed');
+            const pitchSlider = document.getElementById('tts-pitch');
+            const volumeSlider = document.getElementById('tts-volume');
+            
+            if (speedSlider) speedSlider.value = 1.0;
+            if (pitchSlider) pitchSlider.value = 1.0;
+            if (volumeSlider) volumeSlider.value = 1.0;
+            
+            // Trigger input events to update live labels
+            if (speedSlider) speedSlider.dispatchEvent(new Event('input'));
+            if (pitchSlider) pitchSlider.dispatchEvent(new Event('input'));
+            if (volumeSlider) volumeSlider.dispatchEvent(new Event('input'));
+        }
+
+        function copyTTSText() {
+            const text = document.getElementById('tts-input').value.trim();
+            if (!text) {
+                showToast('Please enter some text to copy.', 'warning');
+                return;
+            }
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    showToast('Text copied to clipboard!', 'success');
+                })
+                .catch(err => {
+                    showToast('Failed to copy text: ' + err, 'error');
+                });
+        }
+
+        function triggerMethodBFallback(text, originalText) {
+            const downloadBtn = document.getElementById('tts-download-btn');
+            downloadBtn.innerHTML = originalText;
+            downloadBtn.disabled = false;
+
+            showToast('Audio download requires Chrome/Edge. Use the screen recording feature or copy the text instead.', 'info');
+            
+            const copyOption = confirm("Would you like to copy the text to your clipboard instead?");
+            if (copyOption) {
+                copyTTSText();
+            }
+        }
+
+        function downloadAudio() {
+            const text = document.getElementById('tts-input').value.trim();
+            if (!text) {
+                showToast('Please enter some text to record.', 'warning');
+                return;
+            }
+
+            const downloadBtn = document.getElementById('tts-download-btn');
+            const originalText = downloadBtn.innerHTML;
+
+            try {
+                // Method A: AudioContext + MediaStreamDestination
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContextClass) {
+                    throw new Error('AudioContext not supported');
+                }
+                const audioCtx = new AudioContextClass();
+                const dest = audioCtx.createMediaStreamDestination();
+                
+                // We create a MediaRecorder on the destination stream
+                const recorder = new MediaRecorder(dest.stream);
+                const chunks = [];
+                
+                recorder.ondataavailable = (e) => {
+                    if (e.data && e.data.size > 0) {
+                        chunks.push(e.data);
+                    }
+                };
+                
+                recorder.onstop = () => {
+                    // Check if recording succeeded in capturing data (in standard browsers this produces 0 chunks
+                    // because SpeechSynthesis does not feed the node. That triggers the fallback Method B).
+                    if (chunks.length === 0) {
+                        triggerMethodBFallback(text, originalText);
+                        return;
+                    }
+                    
+                    try {
+                        const blob = new Blob(chunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = audioUrl;
+                        const timestamp = Math.floor(Date.now() / 1000);
+                        a.download = `amora-tts-${timestamp}.wav`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(audioUrl);
+                        
+                        downloadBtn.innerHTML = originalText;
+                        downloadBtn.disabled = false;
+                    } catch (downloadErr) {
+                        showToast('Download failed: ' + downloadErr.message, 'error');
+                        downloadBtn.innerHTML = originalText;
+                        downloadBtn.disabled = false;
+                    }
+                };
+
+                // Show loading state
+                downloadBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Recording...';
+                downloadBtn.disabled = true;
+
+                // Start recording
+                recorder.start();
+
+                // Speak text
+                speakText(() => {
+                    setTimeout(() => {
+                        if (recorder.state !== 'inactive') {
+                            recorder.stop();
+                        }
+                    }, 500); // 500ms safety buffer
+                });
+
+            } catch (err) {
+                console.error('Method A error:', err);
+                triggerMethodBFallback(text, originalText);
+            }
+        }
+
+
+        // ========== Text to Image ==========
+        
+        // Load history grid on startup
+        window.addEventListener('load', () => {
+            renderImgHistory();
+        });
+
+        function getImgHistory() {
+            try {
+                return JSON.parse(localStorage.getItem('amora_img_history') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveImgToHistory(dataUrl) {
+            let history = getImgHistory();
+            // Remove duplication if exists
+            history = history.filter(item => item !== dataUrl);
+            // Put to top
+            history.unshift(dataUrl);
+            // Limit to last 5
+            if (history.length > 5) {
+                history.pop();
+            }
+            localStorage.setItem('amora_img_history', JSON.stringify(history));
+            renderImgHistory();
+        }
+
+        function renderImgHistory() {
+            const grid = document.getElementById('img-history-grid');
+            if (!grid) return;
+            const history = getImgHistory();
+            grid.innerHTML = '';
+            
+            if (history.length === 0) {
+                grid.innerHTML = '<p style="grid-column: span 5; color: #888; font-size: 0.85rem; font-style: italic; margin: 0;">No recent images generated yet.</p>';
+                return;
+            }
+
+            history.forEach(dataUrl => {
+                const item = document.createElement('div');
+                item.className = 'ttoi-history-item';
+                item.style.backgroundImage = `url(${dataUrl})`;
+                item.onclick = () => {
+                    // Open in preview container
+                    const preview = document.getElementById('img-preview');
+                    const container = document.getElementById('img-result-container');
+                    if (preview && container) {
+                        preview.src = dataUrl;
+                        container.style.display = 'flex';
+                        // Scroll to preview
+                        container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                };
+                grid.appendChild(item);
+            });
+        }
+
+        async function generateImage() {
+            const promptInput = document.getElementById('img-prompt');
+            const styleSelect = document.getElementById('img-style');
+            const generateBtn = document.getElementById('generate-img-btn');
+            
+            const loadingPanel = document.getElementById('img-loading');
+            const errorPanel = document.getElementById('img-error');
+            const resultContainer = document.getElementById('img-result-container');
+            const previewImg = document.getElementById('img-preview');
+
+            const prompt = promptInput ? promptInput.value.trim() : '';
+            const style = styleSelect ? styleSelect.value : '';
+
+            // Clean previous alerts
+            if (errorPanel) {
+                errorPanel.textContent = '';
+                errorPanel.style.display = 'none';
+            }
+
+            // Client-side validations
+            if (!prompt) {
+                showToast('Please enter a description for the image.', 'warning');
+                return;
+            }
+            if (prompt.length < 3 || prompt.length > 500) {
+                showToast('Prompt must be between 3 and 500 characters.', 'warning');
+                return;
+            }
+
+            // Set loading states
+            if (loadingPanel) loadingPanel.style.display = 'block';
+            if (resultContainer) resultContainer.style.display = 'none';
+            if (generateBtn) {
+                generateBtn.disabled = true;
+                generateBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Generating...';
+            }
+
+            try {
+                const response = await fetch('/api/generate-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt, style }),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Image generation failed, please try again');
+                }
+
+                if (data.success && data.image) {
+                    if (previewImg) previewImg.src = data.image;
+                    if (resultContainer) resultContainer.style.display = 'flex';
+                    saveImgToHistory(data.image);
+                    hideEmpty('img-history-empty');
+                } else {
+                    throw new Error('No image was returned from the server.');
+                }
+
+            } catch (error) {
+                console.error('Image generation error:', error);
+                if (errorPanel) {
+                    errorPanel.textContent = error.message || 'Image generation failed, please try again';
+                    errorPanel.style.display = 'block';
+                }
+            } finally {
+                if (loadingPanel) loadingPanel.style.display = 'none';
+                if (generateBtn) {
+                    generateBtn.disabled = false;
+                    generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate Image';
+                }
+            }
+        }
+
+        function downloadImageFile() {
+            const previewImg = document.getElementById('img-preview');
+            if (!previewImg || !previewImg.src) {
+                showToast('No image is available to download.', 'warning');
+                return;
+            }
+            try {
+                const a = document.createElement('a');
+                a.href = previewImg.src;
+                a.download = `amora-image-${Math.floor(Date.now() / 1000)}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (err) {
+                showToast('Download failed: ' + err.message, 'error');
+            }
+        }
+
+        async function shareImage() {
+            const previewImg = document.getElementById('img-preview');
+            if (!previewImg || !previewImg.src) {
+                showToast('No image is available to share.', 'warning');
+                return;
+            }
+
+            // Convert base64 dataURL to File if Web Share supports files
+            try {
+                if (navigator.share) {
+                    const response = await fetch(previewImg.src);
+                    const blob = await response.blob();
+                    const file = new File([blob], 'amora-creation.png', { type: 'image/png' });
+                    
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: 'AMORA.AI Creation',
+                            text: 'Check out this stunning image I generated using AMORA.AI!'
+                        });
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.error('Web Share failed:', err);
+            }
+
+            // Fallback: Copy to clipboard
+            try {
+                await navigator.clipboard.writeText(previewImg.src);
+                showToast('Web Share is not supported in this browser. Image Data URL has been copied to your clipboard instead!', 'info');
+            } catch (clipErr) {
+                showToast('Failed to share or copy: ' + clipErr.message, 'error');
+            }
+        }
+
+        // ========== Voice to Text ==========
+        // ========== Voice to Text ==========
+        let sttRecognition = null;
+        let sttIsRecording = false;
+        let sttShouldRestart = false;
+
+        // Listen for language changes while recording
+        window.addEventListener('DOMContentLoaded', () => {
+            const langSelect = document.getElementById('stt-lang');
+            if (langSelect) {
+                langSelect.addEventListener('change', () => {
+                    if (sttIsRecording) {
+                        sttShouldRestart = true;
+                        if (sttRecognition) {
+                            sttRecognition.stop();
+                        }
+                    }
+                });
+            }
+        });
+
+        function showSTTStatus(msg) {
+            const el = document.getElementById('stt-status');
+            if (el) el.textContent = msg;
+            const dot = document.getElementById('stt-recording-dot');
+            if (dot) {
+                dot.style.display = (msg === 'Listening...') ? 'block' : 'none';
+            }
+        }
+
+        function updateSTTWordCount() {
+            const finalNode = document.getElementById('stt-final');
+            const countNode = document.getElementById('stt-word-count');
+            if (!finalNode || !countNode) return;
+            const text = finalNode.textContent.trim();
+            const words = text ? text.split(/\s+/).filter(w => w.length > 0) : [];
+            countNode.textContent = words.length;
+        }
+
+        async function startVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const startBtn = document.getElementById('stt-start');
+            const stopBtn = document.getElementById('stt-stop');
+            const micIcon = document.getElementById('stt-mic-icon');
+            const langSelect = document.getElementById('stt-lang');
+
+            if (!SpeechRecognition) {
+                showSTTStatus('Voice recognition not supported. Use Chrome or Edge.');
+                return;
+            }
+
+            if (sttIsRecording) return;
+
+            // First, explicitly request mic access to trigger browser prompt
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // Stop the stream immediately - we only needed permission
+                stream.getTracks().forEach(track => track.stop());
+            } catch (err) {
+                if (err.name === 'NotAllowedError') {
+                    showSTTStatus('Microphone blocked. Click the lock icon in address bar to allow.');
+                } else if (err.name === 'NotFoundError') {
+                    showSTTStatus('No microphone found. Please connect one.');
+                } else {
+                    showSTTStatus('Microphone error: ' + err.message);
+                }
+                return;
+            }
+
+            // Now start recognition
+            sttRecognition = new SpeechRecognition();
+            sttRecognition.continuous = true;
+            sttRecognition.interimResults = true;
+            sttRecognition.lang = langSelect ? langSelect.value : 'en-US';
+            sttRecognition.maxAlternatives = 1;
+
+            let finalTranscript = document.getElementById('stt-final').textContent || '';
+
+            sttRecognition.onstart = function() {
+                hideEmpty('stt-empty');
+                sttIsRecording = true;
+                showSTTStatus('Listening...');
+                if (startBtn) {
+                    startBtn.classList.add('stt-recording-active');
+                    startBtn.disabled = true;
+                }
+                if (stopBtn) stopBtn.disabled = false;
+                if (micIcon) micIcon.className = 'fas fa-microphone stt-mic-pulse';
+            };
+
+            sttRecognition.onresult = function(event) {
+                hideEmpty('stt-empty');
+                let interimTranscript = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript + ' ';
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+
+                document.getElementById('stt-final').textContent = finalTranscript;
+                document.getElementById('stt-interim').textContent = interimTranscript;
+                updateSTTWordCount();
+            };
+
+            sttRecognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                if (event.error === 'not-allowed') {
+                    showSTTStatus('Microphone permission denied. Click lock icon in address bar.');
+                } else if (event.error === 'no-speech') {
+                    showSTTStatus('No speech detected, try again.');
+                } else if (event.error === 'audio-capture') {
+                    showSTTStatus('No microphone found.');
+                } else {
+                    showSTTStatus('Error: ' + event.error);
+                }
+                if (startBtn) startBtn.classList.remove('stt-recording-active');
+            };
+
+            sttRecognition.onend = function() {
+                sttIsRecording = false;
+                
+                if (startBtn) {
+                    startBtn.classList.remove('stt-recording-active');
+                    startBtn.disabled = false;
+                }
+                if (stopBtn) stopBtn.disabled = true;
+                if (micIcon) micIcon.className = 'fas fa-microphone';
+
+                if (sttShouldRestart) {
+                    sttShouldRestart = false;
+                    // Restart with new language
+                    startVoiceRecognition();
+                } else {
+                    showSTTStatus('Stopped');
+                }
+            };
+
+            try {
+                sttRecognition.start();
+            } catch (err) {
+                console.error('Error starting recognition:', err);
+                showSTTStatus('Recognition error, please try again');
+            }
+        }
+
+        function stopVoiceRecognition() {
+            sttShouldRestart = false;
+            if (sttRecognition && sttIsRecording) {
+                sttRecognition.stop();
+            }
+        }
+
+        function clearVoiceTranscript() {
+            const finalNode = document.getElementById('stt-final');
+            const interimNode = document.getElementById('stt-interim');
+            const statusNode = document.getElementById('stt-status');
+            const countNode = document.getElementById('stt-word-count');
+
+            if (finalNode) finalNode.textContent = '';
+            if (interimNode) interimNode.textContent = '';
+            if (countNode) countNode.textContent = '0';
+            if (statusNode && !sttIsRecording) statusNode.textContent = 'Click Start to begin';
+        }
+
+        function copyVoiceTranscript() {
+            const finalNode = document.getElementById('stt-final');
+            const text = finalNode ? finalNode.textContent.trim() : '';
+            if (!text) {
+                showToast('Transcript is empty. Nothing to copy.', 'warning');
+                return;
+            }
+            navigator.clipboard.writeText(text)
+                .then(() => {
+                    const copyBtn = document.getElementById('stt-copy');
+                    const originalHTML = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalHTML;
+                    }, 2000);
+                })
+                .catch(err => {
+                    showToast('Failed to copy transcript: ' + err, 'error');
+                });
+        }
+
+        function exportVoiceTranscript() {
+            const finalNode = document.getElementById('stt-final');
+            const text = finalNode ? finalNode.textContent.trim() : '';
+            if (!text) {
+                showToast('Transcript is empty. Nothing to export.', 'warning');
+                return;
+            }
+
+            try {
+                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const timestamp = new Date().toISOString().slice(0,10);
+                a.download = `amora-transcript-${timestamp}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                showToast('Export failed: ' + err.message, 'error');
+            }
+        }
+
+        function exportVoiceTranscriptAsPDF() {
+            const textNode = document.getElementById('stt-final');
+            const text = textNode ? textNode.textContent.trim() : '';
+            if (!text) {
+                showToast('Transcript is empty. Nothing to export.', 'warning');
+                return;
+            }
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.setFontSize(16);
+                doc.text('AMORA.AI Voice Transcript', 20, 20);
+                doc.setFontSize(11);
+                doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 30);
+                doc.setLineWidth(0.5);
+                doc.line(20, 35, 190, 35);
+                
+                // Word-wrap text
+                const lines = doc.splitTextToSize(text, 170);
+                doc.text(lines, 20, 45);
+                
+                doc.save(`amora-transcript-${Date.now()}.pdf`);
+            } catch (err) {
+                showToast('PDF Export failed: ' + err.message, 'error');
+            }
+        }
+
+        function exportVoiceTranscriptAsDOC() {
+            const textNode = document.getElementById('stt-final');
+            const text = textNode ? textNode.textContent.trim() : '';
+            if (!text) {
+                showToast('Transcript is empty. Nothing to export.', 'warning');
+                return;
+            }
+
+            try {
+                const html = `
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <title>AMORA.AI Voice Transcript</title>
+                        <style>
+                            body { font-family: 'Arial', sans-serif; line-height: 1.6; padding: 20px; }
+                            h1 { color: #6B5B95; }
+                            hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>AMORA.AI Voice Transcript</h1>
+                        <p><em>Generated: ${new Date().toLocaleString()}</em></p>
+                        <hr/>
+                        <p>${text.replace(/\n/g, '<br/>')}</p>
+                    </body>
+                    </html>
+                `;
+                
+                const blob = new Blob([html], { type: 'application/msword' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `amora-transcript-${Date.now()}.doc`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                showToast('DOC Export failed: ' + err.message, 'error');
+            }
+        }
+
+        function imageToPDF() {
+            const img = document.getElementById('img-preview');
+            if (!img || !img.src) {
+                showToast('Please generate an image first.', 'warning');
+                return;
+            }
+            
+            const promptInput = document.getElementById('img-prompt');
+            const promptVal = promptInput ? promptInput.value.trim() : 'AMORA.AI Creation';
+
+            try {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                doc.setFontSize(16);
+                doc.text('AMORA.AI Generated Image', 20, 20);
+                doc.setFontSize(10);
+                const promptLines = doc.splitTextToSize(`Prompt: ${promptVal}`, 170);
+                doc.text(promptLines, 20, 30);
+                
+                // Add image
+                doc.addImage(img.src, 'JPEG', 20, 45, 170, 170);
+                doc.save(`amora-image-${Date.now()}.pdf`);
+            } catch (err) {
+                showToast('Failed to save as PDF: ' + err.message, 'error');
+            }
+        }
+
+        // ========== Advanced Image Creation (AI Editor, Style Transfer, Batch) ==========
+        
+        function switchImageSubTab(tabName) {
+            // Hide all subtab panes
+            const panes = document.querySelectorAll('.image-subtab-pane');
+            panes.forEach(pane => pane.style.display = 'none');
+            
+            // Show selected subtab pane
+            const targetPane = document.getElementById(`subtab-${tabName}`);
+            if (targetPane) targetPane.style.display = 'block';
+
+            // Reset selector buttons background
+            const buttons = ['editor', 'style', 'batch'];
+            buttons.forEach(btn => {
+                const buttonEl = document.getElementById(`btn-subtab-${btn}`);
+                if (buttonEl) {
+                    if (btn === tabName) {
+                        buttonEl.style.background = 'linear-gradient(135deg, #6B5B95, #8B7AA8)';
+                        buttonEl.style.color = 'white';
+                    } else {
+                        buttonEl.style.background = 'rgba(107, 91, 149, 0.15)';
+                        buttonEl.style.color = '#6B5B95';
+                    }
+                }
+            });
+        }
+
+        // Subtab 1: AI Editor
+        let editorBase64Original = '';
+
+        function previewEditorUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                editorBase64Original = e.target.result;
+                const previewImg = document.getElementById('editor-upload-preview');
+                const container = document.getElementById('editor-upload-preview-container');
+                if (previewImg && container) {
+                    previewImg.src = editorBase64Original;
+                    container.style.display = 'block';
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function applyImageEdit() {
+            const promptInput = document.getElementById('editor-prompt-input');
+            const fileInput = document.getElementById('editor-file-input');
+            const applyBtn = document.getElementById('apply-edit-btn');
+            const loadingPanel = document.getElementById('editor-loading');
+            const errorPanel = document.getElementById('editor-error');
+            const resultContainer = document.getElementById('editor-result-container');
+            const beforeImg = document.getElementById('editor-before-img');
+            const afterImg = document.getElementById('editor-after-img');
+
+            const editPrompt = promptInput ? promptInput.value.trim() : '';
+
+            if (errorPanel) {
+                errorPanel.textContent = '';
+                errorPanel.style.display = 'none';
+            }
+
+            if (!fileInput || fileInput.files.length === 0) {
+                showToast('Please upload an image first.', 'warning');
+                return;
+            }
+            if (!editPrompt) {
+                showToast('Please describe what to edit.', 'warning');
+                return;
+            }
+            if (editPrompt.length < 3 || editPrompt.length > 500) {
+                showToast('Edit description must be between 3 and 500 characters.', 'warning');
+                return;
+            }
+
+            if (loadingPanel) loadingPanel.style.display = 'block';
+            if (resultContainer) resultContainer.style.display = 'none';
+            if (applyBtn) {
+                applyBtn.disabled = true;
+                applyBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Reimagining...';
+            }
+
+            try {
+                const response = await fetch('/api/edit-image', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ editPrompt, originalDescription: 'reference image' }),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Image generation failed, please try again');
+                }
+
+                if (data.success && data.image) {
+                    if (beforeImg) beforeImg.src = editorBase64Original;
+                    if (afterImg) afterImg.src = data.image;
+                    if (resultContainer) resultContainer.style.display = 'flex';
+                    trackGeneratedImageCount();
+                } else {
+                    throw new Error('No image was returned from the server.');
+                }
+            } catch (err) {
+                console.error(err);
+                if (errorPanel) {
+                    errorPanel.textContent = err.message || 'Image generation failed, please try again';
+                    errorPanel.style.display = 'block';
+                }
+            } finally {
+                if (loadingPanel) loadingPanel.style.display = 'none';
+                if (applyBtn) {
+                    applyBtn.disabled = false;
+                    applyBtn.innerHTML = '<i class="fas fa-magic"></i> Apply Edit';
+                }
+            }
+        }
+
+        function downloadEditorImage() {
+            const afterImg = document.getElementById('editor-after-img');
+            if (!afterImg || !afterImg.src) return;
+            triggerDownload(afterImg.src, `amora-reimagined-${Date.now()}.png`);
+        }
+
+        // Subtab 2: Style Transfer
+        function selectStyleChoice(element, styleName) {
+            const items = document.querySelectorAll('.style-choice-item');
+            items.forEach(item => {
+                item.style.border = '2px solid rgba(107, 91, 149, 0.15)';
+                item.style.background = 'white';
+                item.style.color = '#666';
+                item.classList.remove('active');
+            });
+
+            element.style.border = '2px solid #6B5B95';
+            element.style.background = 'rgba(107, 91, 149, 0.08)';
+            element.style.color = '#6B5B95';
+            element.classList.add('active');
+
+            const styleInput = document.getElementById('selected-art-style');
+            if (styleInput) styleInput.value = styleName;
+        }
+
+        async function applyArtStyle() {
+            const promptInput = document.getElementById('style-prompt-input');
+            const styleInput = document.getElementById('selected-art-style');
+            const applyBtn = document.getElementById('apply-style-btn');
+            const loadingPanel = document.getElementById('style-loading');
+            const errorPanel = document.getElementById('style-error');
+            const resultContainer = document.getElementById('style-result-container');
+            const previewImg = document.getElementById('style-preview');
+
+            const prompt = promptInput ? promptInput.value.trim() : '';
+            const style = styleInput ? styleInput.value : '';
+
+            if (errorPanel) {
+                errorPanel.textContent = '';
+                errorPanel.style.display = 'none';
+            }
+
+            if (!prompt) {
+                showToast('Please describe your image.', 'warning');
+                return;
+            }
+            if (prompt.length < 3 || prompt.length > 500) {
+                showToast('Description must be between 3 and 500 characters.', 'warning');
+                return;
+            }
+
+            if (loadingPanel) loadingPanel.style.display = 'block';
+            if (resultContainer) resultContainer.style.display = 'none';
+            if (applyBtn) {
+                applyBtn.disabled = true;
+                applyBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Applying style...';
+            }
+
+            try {
+                const response = await fetch('/api/style-transfer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt, style }),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Image generation failed, please try again');
+                }
+
+                if (data.success && data.image) {
+                    if (previewImg) previewImg.src = data.image;
+                    if (resultContainer) resultContainer.style.display = 'flex';
+                    trackGeneratedImageCount();
+                } else {
+                    throw new Error('No image was returned from the server.');
+                }
+            } catch (err) {
+                console.error(err);
+                if (errorPanel) {
+                    errorPanel.textContent = err.message || 'Image generation failed, please try again';
+                    errorPanel.style.display = 'block';
+                }
+            } finally {
+                if (loadingPanel) loadingPanel.style.display = 'none';
+                if (applyBtn) {
+                    applyBtn.disabled = false;
+                    applyBtn.innerHTML = '<i class="fas fa-magic"></i> Apply Style';
+                }
+            }
+        }
+
+        function downloadStyleImage() {
+            const previewImg = document.getElementById('style-preview');
+            if (!previewImg || !previewImg.src) return;
+            triggerDownload(previewImg.src, `amora-style-${Date.now()}.png`);
+        }
+
+        // Subtab 3: Batch Generating
+        let batchBase64Images = [];
+
+        async function generateImageBatch() {
+            const promptsInput = document.getElementById('batch-prompts-input');
+            const styleSelect = document.getElementById('batch-style-select');
+            const generateBtn = document.getElementById('generate-batch-btn');
+            const loadingPanel = document.getElementById('batch-loading');
+            const progressText = document.getElementById('batch-progress-text');
+            const errorPanel = document.getElementById('batch-error');
+            const resultContainer = document.getElementById('batch-result-container');
+            const grid = document.getElementById('batch-grid');
+
+            const textVal = promptsInput ? promptsInput.value.trim() : '';
+            const style = styleSelect ? styleSelect.value : '';
+
+            if (errorPanel) {
+                errorPanel.textContent = '';
+                errorPanel.style.display = 'none';
+            }
+
+            const prompts = textVal.split('\n').map(p => p.trim()).filter(p => p.length > 0);
+            if (prompts.length === 0) {
+                showToast('Please enter at least one prompt.', 'warning');
+                return;
+            }
+            if (prompts.length > 5) {
+                showToast('You can enter a maximum of 5 prompts.', 'warning');
+                return;
+            }
+
+            batchBase64Images = [];
+            if (grid) grid.innerHTML = '';
+            if (resultContainer) resultContainer.style.display = 'none';
+
+            if (loadingPanel) loadingPanel.style.display = 'block';
+            if (generateBtn) {
+                generateBtn.disabled = true;
+                generateBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Processing Batch...';
+            }
+
+            let completed = 0;
+            if (progressText) progressText.textContent = `Generating batch... (${completed} of ${prompts.length})`;
+
+            try {
+                const response = await fetch('/api/batch-generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompts, style }),
+                    credentials: 'include'
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Batch generation failed, please try again');
+                }
+
+                if (data.success && data.images && data.images.length > 0) {
+                    batchBase64Images = data.images;
+                    
+                    batchBase64Images.forEach((imgSrc, idx) => {
+                        const wrapper = document.createElement('div');
+                        wrapper.style.textAlign = 'center';
+                        
+                        const img = document.createElement('img');
+                        img.src = imgSrc;
+                        img.alt = `Batch item ${idx + 1}`;
+                        img.style.width = '100%';
+                        img.style.borderRadius = '10px';
+                        img.style.border = '1px solid #ddd';
+                        
+                        wrapper.appendChild(img);
+                        grid.appendChild(wrapper);
+                        trackGeneratedImageCount();
+                    });
+
+                    if (resultContainer) resultContainer.style.display = 'flex';
+                } else {
+                    throw new Error('No images were returned for this batch.');
+                }
+            } catch (err) {
+                console.error(err);
+                if (errorPanel) {
+                    errorPanel.textContent = err.message || 'Batch generation failed, please try again';
+                    errorPanel.style.display = 'block';
+                }
+            } finally {
+                if (loadingPanel) loadingPanel.style.display = 'none';
+                if (generateBtn) {
+                    generateBtn.disabled = false;
+                    generateBtn.innerHTML = '<i class="fas fa-magic"></i> Generate All';
+                }
+            }
+        }
+
+        async function downloadBatchAsZip() {
+            if (batchBase64Images.length === 0) {
+                showToast('No batch images available to ZIP.', 'warning');
+                return;
+            }
+
+            if (typeof JSZip === 'undefined') {
+                showToast('JSZip library is still loading, please wait.', 'info');
+                return;
+            }
+
+            const zip = new JSZip();
+
+            batchBase64Images.forEach((dataUrl, idx) => {
+                const base64Data = dataUrl.split(',')[1];
+                zip.file(`image-${idx + 1}.png`, base64Data, { base64: true });
+            });
+
+            try {
+                const content = await zip.generateAsync({ type: 'blob' });
+                const url = URL.createObjectURL(content);
+                triggerDownload(url, `amora-batch-${Date.now()}.zip`);
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                showToast('ZIP creation failed: ' + err.message, 'error');
+            }
+        }
+
+        // Shared Helpers
+        function triggerDownload(url, filename) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function trackGeneratedImageCount() {
+            try {
+                let count = parseInt(localStorage.getItem('amora_img_count') || '0');
+                count++;
+                localStorage.setItem('amora_img_count', count);
+            } catch (e) {}
+        }
+
+        // ========== Games ==========
+        function openGame(gameName) {
+            const names = {
+                'word-association': 'Word Association',
+                'story-builder': 'Story Builder',
+                'puzzle-solver': 'Puzzle Solver',
+                'memory-challenge': 'Memory Challenge'
+            };
+            showToast((names[gameName] || gameName) + ' game is coming soon!', 'info');
+        }
+
+        // ========== Work Schedule ==========
+        function addNewTask() {
+            const title = prompt('Enter task name:');
+            if (!title || !title.trim()) return;
+
+            const time = prompt('Enter time (e.g. 5:00 PM - 6:00 PM):');
+            if (!time || !time.trim()) return;
+
+            const list = document.querySelector('.schedule-list');
+            if (!list) return;
+
+            const item = document.createElement('div');
+            item.className = 'schedule-item';
+            item.innerHTML =
+                '<h4 class="schedule-item-title">' + title.trim() + '</h4>' +
+                '<p class="schedule-item-time">' + time.trim() + '</p>';
+            list.appendChild(item);
+        }
+
+        // ========== Emotional Support ==========
+        window.provideSupport = function(type) {
+            const messages = {
+                motivation: [
+                    "You're stronger than you think. Every step forward counts!",
+                    "Believe in yourself. You have the power to overcome anything.",
+                    "Your potential is limitless. Keep pushing forward!",
+                    "Small steps every day lead to big changes one year later.",
+                    "You are capabale of amazing things. Trust the process."
+                ],
+                calm: [
+                    "Take a deep breath. Inhale peace, exhale tension.",
+                    "This moment will pass. You are safe right now.",
+                    "Close your eyes for 30 seconds. You deserve a break.",
+                    "Slow down. The world will wait for you.",
+                    "Your feelings are valid. It's okay to not be okay."
+                ],
+                happy: [
+                    "Smile! You're doing amazing things every day.",
+                    "Find joy in small moments. They add up to a beautiful life.",
+                    "You bring light to those around you. Never forget that.",
+                    "Today is a gift. That's why it's called the present.",
+                    "Happiness is found in the journey, not just the destination."
+                ],
+                focus: [
+                    "One task at a time. You've got this.",
+                    "Clear your mind. Pick one thing. Start now.",
+                    "Distractions are temporary. Your goals are permanent.",
+                    "Eliminate the noise. Focus on what truly matters.",
+                    "Deep work creates great results. Commit fully."
+                ]
+            };
+            
+            const list = messages[type] || messages.motivation;
+            const random = list[Math.floor(Math.random() * list.length)];
+            
+            // Show message in the support message area
+            const msgEl = document.getElementById('support-message');
+            const textEl = document.getElementById('support-text');
+            
+            if (msgEl && textEl) {
+                textEl.textContent = random;
+                msgEl.style.display = 'block';
+                msgEl.style.animation = 'none';
+                setTimeout(() => {
+                    msgEl.style.animation = 'slideUp 0.4s ease';
+                }, 10);
+            }
+            
+            // Also show as toast for extra feedback
+            if (window.showToast) {
+                showToast('Sending you positive vibes 💜', 'info');
+            }
+        };
+
+        function hideEmpty(id) {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        }
+
+        function showEmpty(id) {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'block';
+        }
+
+        async function loadUserInfo() {
+          try {
+            const res = await fetch('/api/user', { credentials: 'include' });
+            if (!res.ok) return;
+            const data = await res.json();
+            if (!data.authenticated || !data.user) return;
+            
+            const user = data.user;
+            const name = user.name || user.displayName || user.email || 'User';
+            const firstName = name.split(' ')[0].split('@')[0];
+            
+            const nameEl = document.getElementById('user-name');
+            if (nameEl) nameEl.textContent = firstName;
+            
+            const avatar = document.getElementById('user-avatar');
+            if (avatar) {
+              const photo = user.photo || user.avatar || (user.photos && user.photos[0] && user.photos[0].value);
+              if (photo) {
+                avatar.innerHTML = `<img src="${photo}" alt="${firstName}" />`;
+              } else {
+                avatar.textContent = firstName.charAt(0).toUpperCase();
+              }
+            }
+            
+            // Update greeting name if exists
+            const greetingName = document.getElementById('user-greeting-name');
+            if (greetingName) greetingName.textContent = firstName;
+          } catch (e) {
+            console.log('User info load failed');
+          }
+        }
+
+        // Call on page load
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', loadUserInfo);
+        } else {
+          loadUserInfo();
+        }
+
+        function logout() {
+          window.location.href = '/auth/logout';
+        }
+    </script>
+
+    <!-- Auto-reload script for live development -->
+    <script>
+        (function() {
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                let lastModified = {};
+                function checkForChanges() {
+                    fetch(window.location.pathname, {method: 'HEAD', cache: 'no-cache'})
+                        .then(response => {
+                            const lastModifiedHeader = response.headers.get('Last-Modified');
+                            if (lastModifiedHeader) {
+                                if (lastModified[window.location.pathname] &&
+                                    lastModified[window.location.pathname] !== lastModifiedHeader) {
+                                    location.reload();
+                                }
+                                lastModified[window.location.pathname] = lastModifiedHeader;
+                            }
+                        })
+                        .catch(() => {});
+                }
+                setInterval(checkForChanges, 1000);
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Association | AMORA.AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/src/styles/design-tokens.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/src/scripts/toast.js"></script>
+    <style>
+        :root {
+            --primary-color: #6B5B95;
+            --secondary-color: #8B7AA8;
+            --bg-color: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #333;
+            --text-muted: #666;
+            --success-color: #2ec4b6;
+            --error-color: #e74c3c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .top-navigation {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(107, 91, 149, 0.25);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 91, 149, 0.35);
+        }
+
+        .game-wrapper {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 50px rgba(107, 91, 149, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .game-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(107, 91, 149, 0.05);
+            padding: 1rem;
+            border-radius: 14px;
+            margin-bottom: 2rem;
+        }
+
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .score-val {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .score-lbl {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Active word chain display */
+        .chain-container {
+            background: #fff;
+            border: 2px dashed rgba(107, 91, 149, 0.25);
+            border-radius: 15px;
+            padding: 1.5rem;
+            min-height: 80px;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .chain-word {
+            background: rgba(107, 91, 149, 0.1);
+            color: var(--primary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .chain-arrow {
+            color: var(--secondary-color);
+            font-size: 0.8rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid rgba(107, 91, 149, 0.25);
+            border-radius: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: #333;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .game-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .game-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.9rem 1.8rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(107, 91, 149, 0.25);
+        }
+
+        .game-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Clickable word card choices */
+        .choices-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .choice-card {
+            background: white;
+            border: 2px solid rgba(107, 91, 149, 0.15);
+            border-radius: 14px;
+            padding: 1.25rem 0.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+            text-transform: capitalize;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-color);
+            background: rgba(107, 91, 149, 0.03);
+            box-shadow: 0 8px 16px rgba(107, 91, 149, 0.12);
+        }
+
+        @media (max-width: 480px) {
+            .choices-grid {
+                grid-template-columns: 1fr;
+            }
+            .game-wrapper {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="game-header">
+        <a href="/dashboard.html" class="btn btn-ghost">
+            ← Back to Dashboard
+        </a>
+        <h1 class="game-title">Word Association</h1>
+        <div class="game-score">
+            Score: <span id="chain-length">0</span>
+        </div>
+    </header>
+
+    <div class="game-wrapper card">
+        <p class="game-desc">Type an initial word or click options to build the longest word chain!</p>
+
+        <!-- Score display -->
+        <div class="score-board">
+            <div class="score-item">
+                <span class="score-val" id="chain-length">0</span>
+                <span class="score-lbl">Current Chain</span>
+            </div>
+            <div class="score-item">
+                <span class="score-val" id="high-score">0</span>
+                <span class="score-lbl">Best Chain</span>
+            </div>
+        </div>
+
+        <!-- Word chain area -->
+        <div class="chain-container" id="chain-container">
+            <p style="color: #999; font-style: italic;" id="chain-placeholder">Your word chain will appear here...</p>
+        </div>
+
+        <!-- Word Input Form -->
+        <form id="word-form" class="input-group" onsubmit="handleWordSubmit(event)">
+            <input type="text" id="word-input" class="game-input input" placeholder="Type a starting word..." required autocomplete="off">
+            <button type="submit" class="game-btn btn btn-primary" id="submit-btn">Submit</button>
+        </form>
+
+        <!-- Choices selection options -->
+        <div id="choices-section" style="display: none;">
+            <h4 class="choices-title">Pick a related word to continue:</h4>
+            <div class="choices-grid" id="choices-grid">
+                <!-- Clickable choices go here -->
+            </div>
+        </div>
+
+        <button class="game-btn btn btn-secondary" onclick="resetGame()" style="margin-top: 1rem; width: 100%;">
+            <i class="fas fa-undo"></i> Restart Game
+        </button>
+    </div>
+
+    <script>
+        // 55 common associated words dictionary
+        const WORD_DICT = {
+            "ocean": ["wave", "fish", "blue"],
+            "wave": ["surf", "beach", "splash"],
+            "fish": ["water", "swim", "sushi"],
+            "water": ["river", "drink", "lake"],
+            "lake": ["boat", "camping", "forest"],
+            "forest": ["trees", "woods", "hiking"],
+            "trees": ["leaves", "green", "climb"],
+            "green": ["grass", "apple", "frog"],
+            "frog": ["pond", "jump", "toad"],
+            "pond": ["duck", "lily", "splash"],
+            "duck": ["quack", "feathers", "bread"],
+            "apple": ["pie", "sweet", "juice"],
+            "sweet": ["sugar", "candy", "cookie"],
+            "candy": ["chocolate", "lollipop", "sour"],
+            "chocolate": ["milk", "dark", "cake"],
+            "milk": ["cow", "cereal", "glass"],
+            "cow": ["farm", "meadow", "cheese"],
+            "cheese": ["pizza", "mouse", "yellow"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "banana", "lemon"],
+            "yellow": ["sun", "sky", "warmth"],
+            "sky": ["cloud", "airplane", "blue"],
+            "cloud": ["rain", "storm", "white"],
+            "rain": ["umbrella", "puddle", "cloud"],
+            "umbrella": ["dry", "shelter", "handle"],
+            "star": ["night", "space", "shining"],
+            "night": ["moon", "sleep", "dream"],
+            "moon": ["crater", "orbit", "tide"],
+            "space": ["rocket", "astronaut", "planet"],
+            "rocket": ["launch", "fire", "speed"],
+            "speed": ["car", "running", "fast"],
+            "car": ["wheel", "road", "engine"],
+            "road": ["highway", "street", "journey"],
+            "journey": ["map", "travel", "destiny"],
+            "map": ["treasure", "island", "compass"],
+            "treasure": ["gold", "chest", "gems"],
+            "gold": ["ring", "coin", "shining"],
+            "ring": ["marriage", "bell", "circle"],
+            "circle": ["round", "wheel", "spin"],
+            "spin": ["top", "dizzy", "rotate"],
+            "dizzy": ["sick", "spin", "balance"],
+            "sleep": ["bed", "pillow", "blanket"],
+            "bed": ["bedroom", "mattress", "sleep"],
+            "pillow": ["soft", "head", "cushion"],
+            "beach": ["sand", "ocean", "sunny"],
+            "sand": ["desert", "castle", "dune"],
+            "desert": ["cactus", "camel", "heat"],
+            "heat": ["fire", "summer", "sweat"],
+            "fire": ["smoke", "camp", "warm"],
+            "smoke": ["chimney", "fog", "cigar"],
+            "hiking": ["backpack", "boots", "mountain"],
+            "mountain": ["climb", "peak", "snow"],
+            "snow": ["winter", "cold", "skiing"],
+            "winter": ["ice", "coat", "fireplace"],
+            "ice": ["glacier", "skate", "freeze"],
+            "cold": ["shiver", "wind", "jacket"]
+        };
+
+        // Get key elements from dictionary to serve as random choices
+        const DICT_KEYS = Object.keys(WORD_DICT);
+
+        let activeChain = [];
+        let currentHighScore = parseInt(localStorage.getItem('amora_word_high') || '0');
+
+        window.onload = function() {
+            document.getElementById('high-score').textContent = currentHighScore;
+            updateChainUI();
+        };
+
+        function handleWordSubmit(event) {
+            event.preventDefault();
+            const input = document.getElementById('word-input');
+            const word = input.value.trim().toLowerCase();
+            if (!word) return;
+
+            if (activeChain.length > 0) {
+                // If a chain is active, the submitted word must be in the choices list
+                const lastWord = activeChain[activeChain.length - 1];
+                const allowedChoices = getAssociations(lastWord);
+                if (!allowedChoices.includes(word)) {
+                    showToast(`Invalid connection! The word "${word}" is not associated with "${lastWord}". Try picking one of the suggested choices.`, 'error');
+                    return;
+                }
+            }
+
+            addToChain(word);
+            input.value = '';
+            input.placeholder = "Click a card below to continue...";
+            document.getElementById('word-form').style.display = 'none'; // Hide manual input after start
+        }
+
+        function getAssociations(word) {
+            if (WORD_DICT[word]) {
+                return WORD_DICT[word];
+            }
+            // Fallback: pick 3 random dictionary keys
+            const randomChoices = [];
+            while (randomChoices.length < 3) {
+                const randomKey = DICT_KEYS[Math.floor(Math.random() * DICT_KEYS.length)];
+                if (!randomChoices.includes(randomKey) && randomKey !== word) {
+                    randomChoices.push(randomKey);
+                }
+            }
+            return randomChoices;
+        }
+
+        function addToChain(word) {
+            activeChain.push(word);
+            updateChainUI();
+
+            // Update scores
+            const scoreVal = activeChain.length;
+            document.getElementById('chain-length').textContent = scoreVal;
+            if (scoreVal > currentHighScore) {
+                currentHighScore = scoreVal;
+                localStorage.setItem('amora_word_high', currentHighScore);
+                document.getElementById('high-score').textContent = currentHighScore;
+            }
+
+            // Populate next choices
+            showChoices(word);
+        }
+
+        function showChoices(word) {
+            const choices = getAssociations(word);
+            const grid = document.getElementById('choices-grid');
+            grid.innerHTML = '';
+            
+            choices.forEach(choice => {
+                const card = document.createElement('div');
+                card.className = 'choice-card';
+                card.textContent = choice;
+                card.onclick = () => {
+                    addToChain(choice);
+                };
+                grid.appendChild(card);
+            });
+
+            document.getElementById('choices-section').style.display = 'block';
+        }
+
+        function updateChainUI() {
+            const container = document.getElementById('chain-container');
+            const placeholder = document.getElementById('chain-placeholder');
+
+            if (activeChain.length === 0) {
+                container.innerHTML = '';
+                container.appendChild(placeholder);
+                return;
+            }
+
+            container.innerHTML = '';
+            activeChain.forEach((word, index) => {
+                const wordNode = document.createElement('span');
+                wordNode.className = 'chain-word';
+                wordNode.textContent = word;
+                container.appendChild(wordNode);
+
+                if (index < activeChain.length - 1) {
+                    const arrowNode = document.createElement('span');
+                    arrowNode.className = 'chain-arrow';
+                    arrowNode.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                    container.appendChild(arrowNode);
+                }
+            });
+        }
+
+        function resetGame() {
+            activeChain = [];
+            document.getElementById('chain-length').textContent = '0';
+            updateChainUI();
+            
+            const grid = document.getElementById('choices-grid');
+            grid.innerHTML = '';
+            document.getElementById('choices-section').style.display = 'none';
+
+            const input = document.getElementById('word-input');
+            input.placeholder = "Type a starting word...";
+            document.getElementById('word-form').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>

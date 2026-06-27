@@ -7,37 +7,110 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/src/styles/design-tokens.css">
     <link rel="stylesheet" href="/src/styles/main.css">
+    <script src="/src/scripts/toast.js"></script>
 </head>
 <body>
-    <div class="landing-page">
-        <!-- Floating images - Replace src with your images -->
-        <div class="floating-image image-1">
-            <img src="/public/images/image1.jpg" alt="Floating image 1" class="floating-img">
+  <section class="hero">
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+    <div class="floating-shape shape-3"></div>
+    <div class="floating-shape shape-4"></div>
+    
+    <div class="hero-content">
+      <div class="badge">✨ AI-Powered Companion</div>
+      
+      <h1 class="hero-title">
+        Welcome to <span class="gradient-text">AMORA.AI</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        Your all-in-one AI assistant for creativity, productivity, and emotional wellness. 
+        Generate images, transcribe voice, play games, and feel supported — all in one place.
+      </p>
+      
+      <div class="hero-actions">
+        <a href="/about.html" class="btn btn-primary btn-lg btn-hero">
+          Get Started →
+        </a>
+        <a href="/login.html" class="btn btn-ghost btn-lg">
+          Sign In
+        </a>
+      </div>
+      
+      <div class="hero-stats">
+        <div class="stat">
+          <strong>10+</strong>
+          <span>AI Features</span>
         </div>
-        <div class="floating-image image-2">
-            <img src="/public/images/image2.jpg" alt="Floating image 2" class="floating-img">
+        <div class="stat">
+          <strong>4</strong>
+          <span>Interactive Games</span>
         </div>
-        <div class="floating-image image-3">
-            <img src="/public/images/image3.jpg" alt="Floating image 3" class="floating-img">
+        <div class="stat">
+          <strong>8</strong>
+          <span>Languages</span>
         </div>
-        <div class="floating-image image-4">
-            <img src="/public/images/image4.jpg" alt="Floating image 4" class="floating-img">
-        </div>
-        <div class="floating-image image-5">
-            <img src="/public/images/image5.jpg" alt="Floating image 5" class="floating-img">
-        </div>
-        <div class="floating-image image-6">
-            <img src="/public/images/image6.jpg" alt="Floating image 6" class="floating-img">
-        </div>
-        
-        <!-- Main content -->
-        <div class="center-content">
-            <a href="/about.html" class="amora-link">
-                <h1 class="amora-title">AMORA.AI</h1>
-            </a>
-        </div>
+      </div>
     </div>
+  </section>
+  
+  <section class="features-preview">
+    <h2 class="section-title">Everything You Need, Powered by AI</h2>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎤</div>
+        <h3>Voice to Text</h3>
+        <p>Convert speech to text in 8 languages with real-time transcription</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>AI Image Generation</h3>
+        <p>Create stunning images from text with multiple art styles</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🔊</div>
+        <h3>Text to Speech</h3>
+        <p>Convert any text to natural-sounding speech with voice options</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🎮</div>
+        <h3>AI-Powered Games</h3>
+        <p>Engage with puzzles, story builders, and memory challenges</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">💜</div>
+        <h3>Emotional Support</h3>
+        <p>Get motivation and calming messages whenever you need</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <h3>Smart Productivity</h3>
+        <p>Organize tasks and boost your daily efficiency</p>
+      </div>
+    </div>
+  </section>
+  
+  <section class="final-cta">
+    <h2>Ready to experience AI?</h2>
+    <p>Join AMORA.AI and enhance your daily life</p>
+    <a href="/login.html" class="btn btn-primary btn-lg">
+      Start Free Now →
+    </a>
+  </section>
+  
+  <footer class="footer">
+    <p>Made with 💜 by AMORA.AI Team</p>
+    <p class="footer-small">© 2024 AMORA.AI</p>
+  </footer>
     <script type="module" src="/src/main.js"></script>
     <!-- Auto-reload script for live development -->
     <script>

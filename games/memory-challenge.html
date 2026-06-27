@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Challenge | AMORA.AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/src/styles/design-tokens.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/src/scripts/toast.js"></script>
+    <style>
+        :root {
+            --primary-color: #6B5B95;
+            --secondary-color: #8B7AA8;
+            --bg-color: #f8f9fa;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #333;
+            --text-muted: #666;
+            
+            /* Simon colors */
+            --red-color: #ff6584;
+            --red-active: #ff335c;
+            --blue-color: #4cc9f0;
+            --blue-active: #0fbdf2;
+            --green-color: #2ec4b6;
+            --green-active: #1fb3a5;
+            --yellow-color: #ffc107;
+            --yellow-active: #e0a800;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .top-navigation {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(107, 91, 149, 0.25);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 91, 149, 0.35);
+        }
+
+        .game-wrapper {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 50px rgba(107, 91, 149, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .game-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(107, 91, 149, 0.05);
+            padding: 1rem;
+            border-radius: 14px;
+            margin-bottom: 2rem;
+        }
+
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .score-val {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .score-lbl {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* 2x2 Grid Gameboard */
+        .gameboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto 2rem;
+        }
+
+        .simon-pad {
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .simon-pad:active, .simon-pad.active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .pad-red {
+            background-color: var(--red-color);
+        }
+        .pad-red.active {
+            background-color: var(--red-active) !important;
+            box-shadow: 0 0 25px var(--red-active);
+        }
+
+        .pad-blue {
+            background-color: var(--blue-color);
+        }
+        .pad-blue.active {
+            background-color: var(--blue-active) !important;
+            box-shadow: 0 0 25px var(--blue-active);
+        }
+
+        .pad-green {
+            background-color: var(--green-color);
+        }
+        .pad-green.active {
+            background-color: var(--green-active) !important;
+            box-shadow: 0 0 25px var(--green-active);
+        }
+
+        .pad-yellow {
+            background-color: var(--yellow-color);
+        }
+        .pad-yellow.active {
+            background-color: var(--yellow-active) !important;
+            box-shadow: 0 0 25px var(--yellow-active);
+        }
+
+        .game-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 0.9rem 1.8rem;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .game-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(107, 91, 149, 0.25);
+        }
+
+        .status-msg {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            min-height: 28px;
+        }
+
+        @media (max-width: 480px) {
+            .gameboard {
+                width: 240px;
+                height: 240px;
+                gap: 1rem;
+            }
+            .game-wrapper {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="game-header">
+        <a href="/dashboard.html" class="btn btn-ghost">
+            ← Back to Dashboard
+        </a>
+        <h1 class="game-title">Memory Challenge</h1>
+        <div class="game-score">
+            Score: <span id="score-round">0</span>
+        </div>
+    </header>
+
+    <div class="game-wrapper card">
+        <p class="game-desc">Repeat the sequence shown by flashing colors. How far can you go?</p>
+
+        <!-- Score board -->
+        <div class="score-board">
+            <div class="score-item">
+                <span class="score-val" id="score-round">0</span>
+                <span class="score-lbl">Round / Score</span>
+            </div>
+            <div class="score-item">
+                <span class="score-val" id="score-high">0</span>
+                <span class="score-lbl">High Score</span>
+            </div>
+        </div>
+
+        <!-- Status display -->
+        <div class="status-msg" id="status-text">Click "Start Game" to begin!</div>
+
+        <!-- 2x2 Grid -->
+        <div class="gameboard">
+            <button class="simon-pad pad-red" id="pad-0" onclick="handlePadClick(0)" disabled aria-label="Red button"></button>
+            <button class="simon-pad pad-blue" id="pad-1" onclick="handlePadClick(1)" disabled aria-label="Blue button"></button>
+            <button class="simon-pad pad-green" id="pad-2" onclick="handlePadClick(2)" disabled aria-label="Green button"></button>
+            <button class="simon-pad pad-yellow" id="pad-3" onclick="handlePadClick(3)" disabled aria-label="Yellow button"></button>
+        </div>
+
+        <button class="game-btn btn btn-primary" id="start-btn" onclick="startGame()">
+            <i class="fas fa-play"></i> Start Game
+        </button>
+    </div>
+
+    <script>
+        const TONES = {
+            0: 261.63, // Red (C4)
+            1: 329.63, // Blue (E4)
+            2: 392.00, // Green (G4)
+            3: 523.25  // Yellow (C5)
+        };
+
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playTone(frequency, duration) {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.type = 'sine';
+                osc.frequency.value = frequency;
+                
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + 0.03);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration);
+                
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + duration);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        let sequence = [];
+        let playerSequence = [];
+        let roundCount = 0;
+        let highRound = parseInt(localStorage.getItem('amora_memory_high') || '0');
+        let isShowingSequence = false;
+
+        window.onload = function() {
+            document.getElementById('score-high').textContent = highRound;
+        };
+
+        function startGame() {
+            sequence = [];
+            roundCount = 0;
+            document.getElementById('score-round').textContent = '0';
+            document.getElementById('start-btn').style.display = 'none';
+            nextRound();
+        }
+
+        function nextRound() {
+            playerSequence = [];
+            roundCount++;
+            document.getElementById('score-round').textContent = roundCount - 1; // display rounds completed
+            
+            if (roundCount - 1 > highRound) {
+                highRound = roundCount - 1;
+                localStorage.setItem('amora_memory_high', highRound);
+                document.getElementById('score-high').textContent = highRound;
+            }
+
+            // Append a random pad index (0-3)
+            sequence.push(Math.floor(Math.random() * 4));
+            showSequence();
+        }
+
+        async function showSequence() {
+            isShowingSequence = true;
+            disablePads();
+            setStatus('Watch carefully...');
+
+            for (let i = 0; i < sequence.length; i++) {
+                await sleep(500);
+                flashPad(sequence[i]);
+                await sleep(500);
+            }
+
+            isShowingSequence = false;
+            enablePads();
+            setStatus('Your turn!');
+        }
+
+        function flashPad(index) {
+            const pad = document.getElementById(`pad-${index}`);
+            if (pad) {
+                pad.classList.add('active');
+                playTone(TONES[index], 0.3);
+                setTimeout(() => {
+                    pad.classList.remove('active');
+                }, 300);
+            }
+        }
+
+        function handlePadClick(index) {
+            if (isShowingSequence) return;
+            
+            playTone(TONES[index], 0.2);
+            playerSequence.push(index);
+
+            // Verify current step
+            const currentStep = playerSequence.length - 1;
+            if (playerSequence[currentStep] !== sequence[currentStep]) {
+                gameOver();
+                return;
+            }
+
+            // Verify round completion
+            if (playerSequence.length === sequence.length) {
+                disablePads();
+                setStatus('Excellent! Ready for next round...');
+                setTimeout(nextRound, 1200);
+            }
+        }
+
+        function gameOver() {
+            playTone(150, 0.6); // Buzzer sound
+            setStatus('Game Over! You clicked the wrong color.');
+            disablePads();
+            
+            const startBtn = document.getElementById('start-btn');
+            startBtn.style.display = 'block';
+            startBtn.innerHTML = '<i class="fas fa-undo"></i> Try Again';
+        }
+
+        function setStatus(msg) {
+            document.getElementById('status-text').textContent = msg;
+        }
+
+        function disablePads() {
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`pad-${i}`).disabled = true;
+            }
+        }
+
+        function enablePads() {
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`pad-${i}`).disabled = false;
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
+</body>
+</html>
