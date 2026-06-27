@@ -1,162 +1,208 @@
-# AMORA.AI 🚀
+<p align="center">
+  <img src="images.png" alt="AMORA.AI Logo" width="120" />
+</p>
 
-**Where AI Comes to Life!**
+<h1 align="center">AMORA.AI</h1>
 
-A multi-page web application featuring AI-powered tools, quizzes, and a dashboard — with Google and GitHub OAuth authentication.
+<p align="center">
+  <strong>AI-powered companion for creativity, productivity, and emotional wellness</strong>
+</p>
+
+<p align="center">
+  <a href="https://amora-ai.onrender.com"><img alt="Live Demo" src="https://img.shields.io/badge/🌐_Live_Demo-amora--ai.onrender.com-8A2BE2?style=for-the-badge"></a>
+  <img alt="Node.js" src="https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge">
+</p>
 
 ---
 
-## Quick Start
+## ✨ Features
 
-```bash
-# 1. Install dependencies
-npm install
+| Category | Feature | Details |
+|----------|---------|---------|
+| 🎤 | **Voice-to-Text** | Real-time speech recognition in **8 languages** via the Web Speech API |
+| 🎨 | **AI Image Generation** | Create stunning images from text prompts using **Pollinations AI** |
+| 🔊 | **Text-to-Speech** | Convert text to natural speech with **voice & pitch customization** |
+| 🎮 | **AI-Powered Games** | 4 interactive games — Word Association, Story Builder, Puzzle Solver, Memory Challenge |
+| 💜 | **Emotional Support** | Guided affirmations, breathing exercises, and motivational content |
+| 🚀 | **Smart Productivity** | AI-assisted tools to boost creativity and workflow |
+| 🔐 | **Multi-Auth** | Sign in with **Google**, **GitHub**, or **Email/Password** |
+| 📱 | **Fully Responsive** | Beautiful experience on desktop, tablet, and mobile |
 
-# 2. Copy the environment template
-cp .env.example .env
+---
 
-# 3. Fill in your OAuth credentials (see below)
-#    Edit .env with your editor
+## 🛠️ Tech Stack
 
-# 4. Start the server
-npm run dev
+| Layer | Technology |
+|-------|------------|
+| **Backend** | Node.js, Express |
+| **Frontend** | Vanilla HTML, CSS, JavaScript |
+| **Authentication** | Passport.js (Local, Google OAuth 2.0, GitHub OAuth) |
+| **AI & APIs** | Pollinations AI, Web Speech API |
+| **Security** | bcrypt, express-rate-limit, express-validator |
+| **Sessions** | express-session (cookie-based, 24 h TTL) |
+| **Deployment** | Render |
 
-# 5. Open in browser
-#    http://localhost:3000
+---
+
+## 📁 Project Structure
+
+```
+amora-ai/
+├── server/
+│   ├── server.js            # Express entry point
+│   ├── config/              # Passport strategies
+│   ├── middleware/           # Auth middleware
+│   ├── routes/              # Auth & API routes
+│   └── utils/               # Helpers
+├── src/
+│   ├── scripts/             # Lightbox, toast notifications
+│   └── styles/              # Design tokens & main CSS
+├── games/
+│   ├── word-association.html
+│   ├── story-builder.html
+│   ├── puzzle-solver.html
+│   └── memory-challenge.html
+├── index.html               # Landing page
+├── login.html               # Auth page
+├── dashboard.html           # Main app dashboard
+├── about.html               # About page
+├── quiz.html                # Personality quiz
+├── .env.example             # Environment template
+├── package.json
+└── Procfile                 # Render start command
 ```
 
 ---
 
-## Setting Up OAuth Credentials
+## 🚀 Quick Start
 
-### Google OAuth 2.0
+### Prerequisites
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
-2. Create a new project (or select an existing one)
-3. Navigate to **APIs & Services → Credentials**
-4. Click **Create Credentials → OAuth client ID**
-5. Select **Web application** as the application type
-6. Set the application name (e.g., `AMORA.AI`)
-7. Under **Authorized redirect URIs**, add:
+- **Node.js** 18+
+- **npm**
+
+### Installation
+
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/JohanDanielM/amora-ai.git
+   cd amora-ai
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Open `.env` and add your credentials:
+   ```env
+   SESSION_SECRET=your-random-secret-here
+
+   # Google OAuth 2.0 — https://console.cloud.google.com/apis/credentials
+   GOOGLE_CLIENT_ID=your-google-client-id
+   GOOGLE_CLIENT_SECRET=your-google-client-secret
+
+   # GitHub OAuth — https://github.com/settings/developers
+   GITHUB_CLIENT_ID=your-github-client-id
+   GITHUB_CLIENT_SECRET=your-github-client-secret
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open the app**
+   ```
+   http://localhost:3000
+   ```
+
+> [!TIP]
+> OAuth is optional — you can sign up with an email/password without any API keys.
+
+---
+
+## 🔑 OAuth Setup
+
+<details>
+<summary><strong>Google OAuth 2.0</strong></summary>
+
+1. Go to the [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials)
+2. Create an **OAuth 2.0 Client ID** (Web application)
+3. Add to **Authorized redirect URIs**:
    ```
    http://localhost:3000/auth/google/callback
    ```
-8. Click **Create**
-9. Copy the **Client ID** and **Client Secret** into your `.env` file:
+4. Copy the Client ID & Secret into your `.env`
+
+</details>
+
+<details>
+<summary><strong>GitHub OAuth</strong></summary>
+
+1. Go to [GitHub → Settings → Developer Settings → OAuth Apps](https://github.com/settings/developers)
+2. Create a **New OAuth App**
+3. Set **Authorization callback URL**:
    ```
-   GOOGLE_CLIENT_ID=your-client-id-here
-   GOOGLE_CLIENT_SECRET=your-client-secret-here
+   http://localhost:3000/auth/github/callback
    ```
+4. Copy the Client ID & Secret into your `.env`
 
-> **Note:** You may also need to configure the **OAuth consent screen** under APIs & Services → OAuth consent screen. Set it to "External" for testing and add your email as a test user.
-
-### GitHub OAuth
-
-1. Go to [GitHub Developer Settings](https://github.com/settings/developers)
-2. Click **New OAuth App**
-3. Fill in:
-   - **Application name:** `AMORA.AI`
-   - **Homepage URL:** `http://localhost:3000`
-   - **Authorization callback URL:** `http://localhost:3000/auth/github/callback`
-4. Click **Register application**
-5. Copy the **Client ID**
-6. Click **Generate a new client secret** and copy it
-7. Add both to your `.env` file:
-   ```
-   GITHUB_CLIENT_ID=your-client-id-here
-   GITHUB_CLIENT_SECRET=your-client-secret-here
-   ```
-
-### Pollinations AI Integration
-
-Text-to-Image generation uses **Pollinations AI** (Flux model). No API key is required for local execution. Images are generated in 5-15 seconds.
+</details>
 
 ---
 
-## Environment Variables
+## 🌐 Deployment
 
-Copy `.env.example` to `.env` and fill in the values:
+AMORA.AI is deployed on **[Render](https://render.com)** (free tier).
 
-| Variable | Description |
-|---|---|
-| `PORT` | Server port (default: `3000`) |
-| `NODE_ENV` | `development` or `production` |
-| `SESSION_SECRET` | A random string for session encryption |
-| `GOOGLE_CLIENT_ID` | From Google Cloud Console |
-| `GOOGLE_CLIENT_SECRET` | From Google Cloud Console |
-| `GOOGLE_CALLBACK_URL` | `http://localhost:3000/auth/google/callback` |
-| `GITHUB_CLIENT_ID` | From GitHub Developer Settings |
-| `GITHUB_CLIENT_SECRET` | From GitHub Developer Settings |
-| `GITHUB_CALLBACK_URL` | `http://localhost:3000/auth/github/callback` |
-| `CLIENT_URL` | `http://localhost:3000` |
-| `HUGGINGFACE_API_KEY` | Read access token from Hugging Face |
+| Setting | Value |
+|---------|-------|
+| Build Command | `npm install` |
+| Start Command | `npm start` |
+| Node Version | `18+` |
+
+> [!NOTE]
+> The free Render tier uses ephemeral storage — local accounts in `data/users.json` are reset on each deploy. OAuth accounts (Google/GitHub) recreate automatically. For persistence, consider migrating to **MongoDB Atlas** (free 512 MB tier).
+
+For the full deployment walkthrough, see [**DEPLOYMENT.md**](DEPLOYMENT.md).
 
 ---
 
-## Project Structure
+## 🎮 Games
 
-```
-amora.ai/
-├── server/
-│   ├── server.js                 # Express app entry point
-│   ├── config/
-│   │   └── passport.js           # Passport OAuth strategies
-│   ├── middleware/
-│   │   └── authMiddleware.js     # Auth protection middleware
-│   └── routes/
-│       └── auth.js               # OAuth & logout routes
-├── src/
-│   ├── main.js                   # Landing + about page JS
-│   ├── quiz.js                   # Quiz page JS
-│   └── styles/
-│       └── main.css              # Global stylesheet
-├── public/                       # Static assets (images, audio)
-├── index.html                    # Landing page
-├── about.html                    # About / intro page
-├── quiz.html                     # Preference quiz
-├── login.html                    # Login page (Google + GitHub OAuth)
-├── dashboard.html                # Protected dashboard (requires auth)
-├── .env.example                  # Environment variable template
-├── .gitignore
-├── package.json
-└── README.md
-```
+| Game | Description |
+|------|-------------|
+| 🔤 **Word Association** | AI gives a word — you respond with associated words against the clock |
+| 📖 **Story Builder** | Co-create stories with AI, alternating sentences |
+| 🧩 **Puzzle Solver** | Solve AI-generated logic puzzles and riddles |
+| 🧠 **Memory Challenge** | Test and improve your memory with pattern-matching games |
 
 ---
 
-## Auth Flow
+## 🤝 Contributing
 
-```
-User visits / (landing page)
-  → clicks AMORA.AI title
-  → /about.html (auto-redirects after animation)
-  → /quiz.html (preference quiz)
-  → /login.html (after quiz completion)
-  → clicks "Continue with Google" or "Continue with GitHub"
-  → OAuth provider login
-  → /auth/{provider}/callback
-  → Session created → redirect to /dashboard.html
-```
+Contributions are welcome! Here's how:
 
-**Protected routes:**
-- `/dashboard.html` — redirects to `/login.html` if not authenticated
-
-**API endpoints:**
-- `GET /api/user` — returns current user info (or `{ authenticated: false }`)
-- `GET /auth/logout` — destroys session, redirects to `/login.html`
-- `GET /auth/status` — returns auth status as JSON
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
 
 ---
 
-## Scripts
+## 📄 License
 
-| Command | Description |
-|---|---|
-| `npm start` | Start production server |
-| `npm run dev` | Start with auto-reload (nodemon) |
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## License
-
-MIT
+<p align="center">
+  Built with 💜 by <a href="https://github.com/JohanDanielM">JohanDanielM</a>
+</p>
