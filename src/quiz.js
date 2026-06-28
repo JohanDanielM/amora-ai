@@ -6,6 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const answers = {};
     let currentQuestion = 1;
 
+    // Initialize progress bar
+    updateProgressBar(1);
+
+    function updateProgressBar(step) {
+        const progressBar = document.getElementById('quizProgressBar');
+        const progressText = document.getElementById('quizProgressText');
+        if (progressBar && progressText) {
+            const percentage = (step / 5) * 100;
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${step} / 5`;
+        }
+    }
+
     // Handle option button clicks
     document.querySelectorAll('.option-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -52,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nextBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
             
             currentQuestion = nextQuestionNum;
+            updateProgressBar(currentQuestion);
         }
     }
 
@@ -60,6 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
         lastBox.classList.remove('active');
         lastBox.classList.add('answered');
         
+        // Final progress bar update to 5/5
+        updateProgressBar(5);
+        
         const completionBox = document.getElementById('completionBox');
         completionBox.classList.add('active');
         completionBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -67,15 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
         // Log all answers
         console.log('Quiz answers:', answers);
         
-        // Store answers in localStorage (optional, for later use)
-        localStorage.setItem('quizAnswers', JSON.stringify(answers));
+        // Store answers in localStorage as amoraPreferences
+        const preferences = {
+            stateOfMind: answers[1] || 'calm',
+            interactionType: answers[2] || 'text',
+            responseStyle: answers[3] || 'short',
+            wantsTTS: answers[4] === 'yes',
+            interfaceStyle: answers[5] || 'calm'
+        };
+        localStorage.setItem('amoraPreferences', JSON.stringify(preferences));
         
-        // Redirect to login page after showing completion message
+        // Redirect to login page with fromQuiz query parameter after showing completion message
         setTimeout(() => {
-            window.location.href = 'login.html';
+            window.location.href = 'login.html?fromQuiz=true';
         }, 2000);
     }
-
 
     // Handle quiz image loading error
     document.querySelectorAll('.quiz-image').forEach(img => {
@@ -85,4 +108,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-

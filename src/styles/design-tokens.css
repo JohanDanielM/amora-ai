@@ -1166,3 +1166,1621 @@ form .input {
   color: var(--color-neutral-700);
   margin-bottom: var(--space-2);
 }
+
+/* ==========================================================================
+   NEURODIVERGENT-ADAPTIVE STYLE THEMES
+   ========================================================================== */
+
+/* Motion scale defaults to 1 */
+:root {
+  --motion-scale: 1;
+}
+
+body.style-calm {
+  filter: saturate(0.85);
+  --motion-scale: 0.15;
+}
+
+body.style-bright {
+  filter: saturate(1.15) contrast(1.02);
+  --motion-scale: 1.15;
+}
+
+body.style-modern {
+  filter: contrast(1.05) brightness(0.98);
+  --motion-scale: 1;
+}
+
+/* Accessible reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  body {
+    --motion-scale: 0 !important;
+  }
+  *, *::before, *::after {
+    animation-delay: 0s !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-delay: 0s !important;
+    transition-duration: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Allow mode classes to override base body */
+body[class*="mode-"] {
+  transition: background 0.3s ease !important;
+}
+
+/* Ensure html element doesn't fight back */
+html {
+  background: transparent;
+}
+
+/* ==========================================================================
+   THEME 1: CALM MODE (body.mode-calm)
+   ========================================================================== */
+body.mode-calm {
+  background: linear-gradient(135deg, #f5f0fa 0%, #ede4f5 100%) !important;
+  --color-primary-600: #8b7cb6 !important;
+  --color-primary-700: #6f5fa3 !important;
+  --color-primary-50: #faf7fc !important;
+  --gradient-primary: linear-gradient(135deg, #8b7cb6 0%, #b294c4 100%) !important;
+}
+
+body.mode-calm .user-bar {
+  background: rgba(245, 240, 250, 0.95) !important;
+  border-bottom: 1px solid rgba(139, 124, 182, 0.15) !important;
+}
+
+body.mode-calm .dashboard-greeting {
+  background: transparent !important;
+}
+
+body.mode-calm .card {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(139, 124, 182, 0.1) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 2px 12px rgba(139, 124, 182, 0.08) !important;
+}
+
+body.mode-calm .tab-content {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-radius: 20px !important;
+  padding: 24px !important;
+}
+
+body.mode-calm .greeting-title {
+  color: #6f5fa3 !important;
+}
+
+body.mode-calm .btn-primary {
+  background: linear-gradient(135deg, #8b7cb6, #b294c4) !important;
+  border-radius: 12px !important;
+}
+
+body.mode-calm .tab-button.active {
+  color: #6f5fa3 !important;
+}
+
+/* Slower transitions everywhere */
+body.mode-calm,
+body.mode-calm * {
+  transition-duration: 0.5s !important;
+  transition-timing-function: ease-in-out !important;
+}
+
+/* Inputs */
+body.mode-calm .input,
+body.mode-calm input[type="text"],
+body.mode-calm input[type="email"],
+body.mode-calm textarea {
+  border-radius: var(--radius-lg) !important;
+  padding: var(--space-4) !important;
+  font-size: 16px !important;
+}
+
+/* ==========================================================================
+   THEME 2: FOCUSED MODE (body.mode-focused)
+   ========================================================================== */
+/* ═══════ FOCUSED MODE - DARK MODE - NUCLEAR ═══════ */
+
+html:has(body.mode-focused) {
+  background: #0f172a !important;
+}
+
+body.mode-focused,
+body.mode-focused.mode-playful,
+body.mode-focused.mode-calm {
+  background: #0f172a !important;
+  background-color: #0f172a !important;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(6, 182, 212, 0.08) 0%, transparent 50%) !important;
+  color: #e2e8f0 !important;
+}
+
+/* Force ALL containers transparent so dark bg shows */
+body.mode-focused main,
+body.mode-focused .dashboard-container,
+body.mode-focused .dashboard-content,
+body.mode-focused .container,
+body.mode-focused > div,
+body.mode-focused section {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Cards stay dark */
+body.mode-focused .card,
+body.mode-focused .feature-card,
+body.mode-focused .tab-content {
+  background: #1e293b !important;
+  background-color: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* User bar dark */
+body.mode-focused .user-bar {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+/* Tab navigation dark */
+body.mode-focused .tab-nav {
+  background: rgba(30, 41, 59, 0.6) !important;
+}
+
+body.mode-focused .tab-button {
+  color: #94a3b8 !important;
+}
+
+body.mode-focused .tab-button.active {
+  color: #818cf8 !important;
+  background: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* All text light */
+body.mode-focused h1,
+body.mode-focused h2,
+body.mode-focused h3,
+body.mode-focused p,
+body.mode-focused span:not(.brand-text):not(.gradient-text),
+body.mode-focused label {
+  color: #e2e8f0 !important;
+}
+
+body.mode-focused h1, body.mode-focused h2, body.mode-focused h3 {
+  color: #f1f5f9 !important;
+}
+
+/* User name and brand */
+body.mode-focused .user-name {
+  color: #f1f5f9 !important;
+}
+
+body.mode-focused .greeting-title {
+  color: #f1f5f9 !important;
+}
+
+body.mode-focused .greeting-subtitle {
+  color: #cbd5e1 !important;
+}
+
+/* Inputs dark */
+body.mode-focused input,
+body.mode-focused textarea,
+body.mode-focused select {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Floating sidebar in focused mode */
+body.mode-focused .floating-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%) !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5) !important;
+}
+
+body.mode-focused .floating-btn-support {
+  background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%) !important;
+}
+
+/* Other specific elements */
+body.mode-focused .brand-text {
+  background: linear-gradient(135deg, #818cf8, #06b6d4) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+body.mode-focused .btn-logout {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+body.mode-focused .btn-logout:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+body.mode-focused .btn-primary {
+  background: linear-gradient(135deg, #6366f1, #06b6d4) !important;
+  color: white !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-radius: 6px !important;
+  font-size: 13px !important;
+}
+
+body.mode-focused .btn-secondary {
+  background: rgba(99, 102, 241, 0.1) !important;
+  border: 1px solid #818cf8 !important;
+  color: #818cf8 !important;
+}
+
+body.mode-focused .input::placeholder,
+body.mode-focused input::placeholder,
+body.mode-focused textarea::placeholder {
+  color: #64748b !important;
+}
+
+body.mode-focused .input:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2) !important;
+}
+
+body.mode-focused .personalized-banner {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1)) !important;
+  border-left-color: #818cf8 !important;
+  color: #e2e8f0 !important;
+}
+
+body.mode-focused .personalized-banner strong {
+  color: #f1f5f9 !important;
+}
+
+body.mode-focused #stt-status,
+body.mode-focused .status {
+  color: #cbd5e1 !important;
+}
+
+/* Faster transitions */
+body.mode-focused,
+body.mode-focused * {
+  transition-duration: 0.15s !important;
+}
+
+/* ==========================================================================
+   THEME 3: PLAYFUL MODE (body.mode-playful)
+   ========================================================================== */
+body.mode-playful {
+  background: linear-gradient(135deg, #fef3f7 0%, #fff5e6 50%, #faf0ff 100%) !important;
+  --color-primary-600: #c026d3 !important;
+  --color-primary-700: #a21caf !important;
+  --color-accent: #f97316 !important;
+  --gradient-primary: linear-gradient(135deg, #c026d3 0%, #f97316 100%) !important;
+}
+
+body.mode-playful .user-bar {
+  background: rgba(254, 243, 247, 0.95) !important;
+  border-bottom: 1px solid rgba(192, 38, 211, 0.15) !important;
+}
+
+body.mode-playful .card,
+body.mode-playful .tab-content {
+  background: white !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(192, 38, 211, 0.08) !important;
+}
+
+body.mode-playful .card:hover,
+body.mode-playful .feature-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 12px 30px rgba(192, 38, 211, 0.15) !important;
+}
+
+body.mode-playful .btn-primary {
+  background: linear-gradient(135deg, #c026d3, #f97316) !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 14px rgba(192, 38, 211, 0.2) !important;
+}
+
+body.mode-playful .btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(192, 38, 211, 0.3) !important;
+}
+
+body.mode-playful .greeting-title span {
+  background: linear-gradient(135deg, #c026d3, #f97316) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+body.mode-playful .tab-button.active {
+  color: #c026d3 !important;
+}
+
+/* Transition timing */
+body.mode-playful * {
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* ═══════════════════════════════════════════════
+   FOCUSED MODE - INNER ELEMENTS DARK OVERRIDE
+   ═══════════════════════════════════════════════ */
+
+/* Catch ALL background-colored inner elements */
+body.mode-focused .card > div,
+body.mode-focused .tab-content > div,
+body.mode-focused .feature-card > div,
+body.mode-focused .form-section,
+body.mode-focused .input-group,
+body.mode-focused .options-grid,
+body.mode-focused .support-message,
+body.mode-focused .result-box,
+body.mode-focused .preview-box,
+body.mode-focused .info-box,
+body.mode-focused .stat-card,
+body.mode-focused .empty-state {
+  background: rgba(30, 41, 59, 0.6) !important;
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  color: #e2e8f0 !important;
+}
+
+/* Light gray sections (often used for forms) */
+body.mode-focused [style*="background: #f"],
+body.mode-focused [style*="background-color: #f"],
+body.mode-focused [style*="background:#f"],
+body.mode-focused [style*="background-color:#f"] {
+  background: rgba(30, 41, 59, 0.6) !important;
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  color: #e2e8f0 !important;
+}
+
+/* Style picker buttons / option buttons */
+body.mode-focused .style-option,
+body.mode-focused .option-btn,
+body.mode-focused .picker-option,
+body.mode-focused button.style-pill,
+body.mode-focused .style-button {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+body.mode-focused .style-option:hover,
+body.mode-focused .option-btn:hover,
+body.mode-focused .picker-option:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border-color: #818cf8 !important;
+  color: #818cf8 !important;
+}
+
+body.mode-focused .style-option.selected,
+body.mode-focused .style-option.active,
+body.mode-focused .option-btn.selected {
+  background: rgba(99, 102, 241, 0.2) !important;
+  border-color: #818cf8 !important;
+  color: #818cf8 !important;
+}
+
+/* Emotional Support: support buttons (Motivation, Calm Down, etc.) */
+body.mode-focused .support-btn,
+body.mode-focused .support-option,
+body.mode-focused [onclick*="provideSupport"] {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+body.mode-focused .support-btn:hover,
+body.mode-focused .support-option:hover,
+body.mode-focused [onclick*="provideSupport"]:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border-color: #818cf8 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Support message result box */
+body.mode-focused #support-message,
+body.mode-focused .support-message {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body.mode-focused #support-text,
+body.mode-focused .support-text {
+  color: #e2e8f0 !important;
+}
+
+/* Image generation result area */
+body.mode-focused #image-result,
+body.mode-focused .image-result,
+body.mode-focused #generated-image-container {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid #334155 !important;
+}
+
+/* Form labels in dark mode */
+body.mode-focused label,
+body.mode-focused .form-label,
+body.mode-focused .field-label {
+  color: #cbd5e1 !important;
+}
+
+/* All text within tab content - force light */
+body.mode-focused .tab-content,
+body.mode-focused .tab-content > *,
+body.mode-focused .tab-content p,
+body.mode-focused .tab-content span:not(.brand-text):not(.gradient-text),
+body.mode-focused .tab-content div,
+body.mode-focused .tab-content small,
+body.mode-focused .tab-content label {
+  color: #e2e8f0 !important;
+}
+
+body.mode-focused .tab-content h1,
+body.mode-focused .tab-content h2,
+body.mode-focused .tab-content h3,
+body.mode-focused .tab-content h4 {
+  color: #f1f5f9 !important;
+}
+
+/* Headings with purple/colored text - keep colored but adjust */
+body.mode-focused .tab-content h2[style*="color"],
+body.mode-focused .tab-content h3[style*="color"] {
+  color: #818cf8 !important;
+}
+
+/* "How are you feeling today?" type headings */
+body.mode-focused .section-heading,
+body.mode-focused .tab-content > h2 {
+  color: #f1f5f9 !important;
+}
+
+/* Sub-headings (purple titles like "Describe Your Image") */
+body.mode-focused .sub-heading,
+body.mode-focused .form-section h3,
+body.mode-focused .form-section h4 {
+  color: #818cf8 !important;
+}
+
+/* Transcript area, code blocks, output areas */
+body.mode-focused .transcript,
+body.mode-focused .output,
+body.mode-focused #stt-final,
+body.mode-focused #stt-interim,
+body.mode-focused pre,
+body.mode-focused code {
+  background: rgba(15, 23, 42, 0.8) !important;
+  color: #e2e8f0 !important;
+  border: 1px solid #334155 !important;
+}
+
+body.mode-focused #stt-interim {
+  color: #94a3b8 !important;
+}
+
+/* History/grid items */
+body.mode-focused .history-item,
+body.mode-focused .grid-item {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+}
+
+/* ═══════════════ TAB ORDER PERSONALIZATION ═══════════════ */
+
+/* Default order (no mode) - keep as is */
+.tab-nav .tab-button {
+  order: 0;
+}
+
+/* CALM MODE - Emotional Support FIRST, gentle features prominent */
+body.mode-calm .tab-nav .tab-button[data-tab="emotional-support"] { order: 1; }
+body.mode-calm .tab-nav .tab-button[data-tab="text-to-image"] { order: 2; }
+body.mode-calm .tab-nav .tab-button[data-tab="text-to-speech"] { order: 3; }
+body.mode-calm .tab-nav .tab-button[data-tab="voice-to-text"] { order: 4; }
+body.mode-calm .tab-nav .tab-button[data-tab="games"] { order: 5; }
+body.mode-calm .tab-nav .tab-button[data-tab="image-creation"] { order: 6; }
+body.mode-calm .tab-nav .tab-button[data-tab="work-schedule"] { order: 7; }
+
+/* FOCUSED MODE - Voice-to-Text FIRST, productivity prominent */
+body.mode-focused .tab-nav .tab-button[data-tab="voice-to-text"] { order: 1; }
+body.mode-focused .tab-nav .tab-button[data-tab="work-schedule"] { order: 2; }
+body.mode-focused .tab-nav .tab-button[data-tab="text-to-speech"] { order: 3; }
+body.mode-focused .tab-nav .tab-button[data-tab="text-to-image"] { order: 4; }
+body.mode-focused .tab-nav .tab-button[data-tab="image-creation"] { order: 5; }
+body.mode-focused .tab-nav .tab-button[data-tab="games"] { order: 6; }
+body.mode-focused .tab-nav .tab-button[data-tab="emotional-support"] { order: 7; }
+
+/* PLAYFUL MODE - Games FIRST, creative features prominent */
+body.mode-playful .tab-nav .tab-button[data-tab="games"] { order: 1; }
+body.mode-playful .tab-nav .tab-button[data-tab="text-to-image"] { order: 2; }
+body.mode-playful .tab-nav .tab-button[data-tab="image-creation"] { order: 3; }
+body.mode-playful .tab-nav .tab-button[data-tab="text-to-speech"] { order: 4; }
+body.mode-playful .tab-nav .tab-button[data-tab="voice-to-text"] { order: 5; }
+body.mode-playful .tab-nav .tab-button[data-tab="emotional-support"] { order: 6; }
+body.mode-playful .tab-nav .tab-button[data-tab="work-schedule"] { order: 7; }
+
+/* Ensure tab-nav uses flex for ordering */
+.tab-navigation .tab-nav-list {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+/* ═══════════════════════════════════════════════
+   FLOATING QUICK ACCESS SIDEBAR & MODALS
+   ═══════════════════════════════════════════════ */
+
+.floating-sidebar {
+  position: fixed !important;
+  right: 24px !important;
+  bottom: 24px !important;
+  top: auto !important;
+  left: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  z-index: 9999 !important;
+  animation: slideInRight 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
+}
+
+.floating-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 12px 18px !important;
+  background: var(--gradient-primary) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 50px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  box-shadow: 0 8px 24px rgba(107, 70, 193, 0.35) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  white-space: nowrap !important;
+}
+
+.floating-btn:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 12px 30px rgba(107, 70, 193, 0.45) !important;
+}
+
+.floating-btn-support {
+  background: linear-gradient(135deg, #ec4899 0%, #f97316 100%) !important;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ═══════ QUICK MODALS - VIEWPORT CENTERED ═══════ */
+
+.quick-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 99999;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.quick-modal.show,
+.quick-modal[style*="display: block"],
+.quick-modal[style*="display:block"] {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.quick-modal-content {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  padding: 32px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+  animation: modalIn 0.25s ease-out;
+  margin: auto;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.quick-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  background: rgba(0,0,0,0.08);
+  border: none;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  z-index: 10;
+}
+
+.quick-modal-close:hover {
+  background: rgba(0,0,0,0.15);
+}
+
+.quick-modal-content h3 {
+  margin: 0 0 8px 0;
+  color: #6b46c1;
+  font-size: 24px;
+}
+
+.quick-modal-content > p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.quick-support-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.quick-support-message {
+  margin-top: 20px;
+  padding: 16px;
+  background: #f3eaff;
+  border-left: 4px solid #6b46c1;
+  border-radius: 8px;
+  font-style: italic;
+}
+
+.quick-games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.quick-game-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  background: #f3eaff;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #6b46c1;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.quick-game-card:hover {
+  transform: translateY(-4px);
+  background: white;
+  border-color: #6b46c1;
+  box-shadow: 0 8px 20px rgba(107, 70, 193, 0.2);
+}
+
+.game-emoji {
+  font-size: 32px;
+}
+
+/* Focused mode adaptations */
+body.mode-focused .quick-modal-content {
+  background: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+}
+
+body.mode-focused .quick-modal-content h3 {
+  color: #818cf8;
+}
+
+body.mode-focused .quick-modal-content > p {
+  color: #cbd5e1;
+}
+
+body.mode-focused .quick-modal-close {
+  background: rgba(255,255,255,0.1);
+  color: #cbd5e1;
+}
+
+body.mode-focused .quick-game-card {
+  background: rgba(99, 102, 241, 0.1);
+  color: #cbd5e1;
+}
+
+body.mode-focused .quick-game-card:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #818cf8;
+  color: #818cf8;
+}
+
+body.mode-focused .quick-support-message {
+  background: rgba(99, 102, 241, 0.15);
+  border-left-color: #818cf8;
+  color: #e2e8f0;
+}
+
+/* ═══════════════════════════════════════════════
+   MODE SWITCHER CSS
+   ═══════════════════════════════════════════════ */
+
+.mode-switcher {
+  position: relative;
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.mode-switcher-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(107, 70, 193, 0.15);
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-neutral-700);
+  transition: all 0.2s;
+}
+
+.mode-switcher-btn:hover {
+  background: white;
+  border-color: var(--color-primary-600);
+  box-shadow: 0 4px 12px rgba(107, 70, 193, 0.15);
+}
+
+.mode-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 240px;
+  background: white;
+  border: 1px solid rgba(107, 70, 193, 0.15);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  z-index: 1000;
+  display: none;
+}
+
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.mode-option:hover {
+  background: var(--color-primary-50);
+}
+
+/* Dark mode adapt */
+body.mode-focused .mode-switcher-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+body.mode-focused .mode-menu {
+  background: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+body.mode-focused .mode-option:hover {
+  background: rgba(99, 102, 241, 0.15);
+}
+
+/* ═══════════════════════════════════════════════
+   UI POLISH & STITCH FOCUS
+   ═══════════════════════════════════════════════ */
+
+/* 1. Subtle Active Tab Highlight */
+.tab-button.active {
+  background: var(--color-primary-50) !important;
+  color: var(--color-primary-700) !important;
+  border-bottom: 3px solid var(--color-primary-600) !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+/* 2. Image Editor button matching active theme */
+button[onclick*="aiImageEditor"],
+button[onclick*="ImageEditor"],
+.advanced-image button,
+.image-creation-actions button {
+  background: var(--gradient-primary) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* 3. Horizontal Scroll for Tab Navigation */
+.tab-navigation .tab-nav-list {
+  display: flex !important;
+  overflow-x: auto !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  scrollbar-width: thin;
+  padding-bottom: 4px;
+}
+
+.tab-navigation .tab-nav-list::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tab-navigation .tab-nav-list::-webkit-scrollbar-thumb {
+  background: var(--color-primary-200);
+  border-radius: 2px;
+}
+
+.tab-nav-item {
+  flex-shrink: 0 !important;
+}
+
+.tab-button {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* 4. Breathable Cards */
+.feature-card, .card {
+  padding: var(--space-6) !important;
+}
+
+/* 5. Spacing, Hover States and Consistency */
+.card, .feature-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+.btn {
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* ═══════ FOCUSED MODE - REFINED POLISH ═══════ */
+
+/* Hide scrollbar on tab nav (was showing white bar) */
+body.mode-focused .tab-nav,
+.tab-nav {
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+body.mode-focused .tab-nav::-webkit-scrollbar,
+.tab-nav::-webkit-scrollbar {
+  display: none !important;
+  height: 0 !important;
+}
+
+/* Tab nav cleaner in focused mode */
+body.mode-focused .tab-nav {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 8px !important;
+  backdrop-filter: blur(10px);
+}
+
+/* Tab buttons in focused mode - more polished */
+body.mode-focused .tab-button {
+  color: #94a3b8 !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
+  transition: all 0.2s !important;
+}
+
+body.mode-focused .tab-button:hover {
+  color: #cbd5e1 !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+}
+
+body.mode-focused .tab-button.active {
+  color: #818cf8 !important;
+  background: rgba(99, 102, 241, 0.15) !important;
+  border-bottom: none !important;
+  font-weight: 600 !important;
+}
+
+/* Cards with proper depth */
+body.mode-focused .card,
+body.mode-focused .feature-card,
+body.mode-focused .tab-content {
+  background: #1e293b !important;
+  border: 1px solid rgba(99, 102, 241, 0.1) !important;
+  border-radius: 12px !important;
+  color: #e2e8f0 !important;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.mode-focused .card:hover {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 
+    0 10px 15px rgba(0, 0, 0, 0.3),
+    0 4px 6px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Inner sub-cards (like inside Style Transfer) */
+body.mode-focused .card .card,
+body.mode-focused .nested-card,
+body.mode-focused .sub-section {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Better input styling in focused mode */
+body.mode-focused input,
+body.mode-focused textarea,
+body.mode-focused select {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1.5px solid #334155 !important;
+  color: #e2e8f0 !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+}
+
+body.mode-focused input:focus,
+body.mode-focused textarea:focus,
+body.mode-focused select:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15) !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  outline: none !important;
+}
+
+body.mode-focused input::placeholder,
+body.mode-focused textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Style picker buttons (Van Gogh, Picasso, etc.) */
+body.mode-focused .style-option,
+body.mode-focused .option-btn,
+body.mode-focused button[class*="style"] {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+  border-radius: 8px !important;
+  padding: 10px 16px !important;
+  transition: all 0.2s !important;
+}
+
+body.mode-focused .style-option:hover,
+body.mode-focused .option-btn:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border-color: #818cf8 !important;
+  color: #818cf8 !important;
+  transform: translateY(-1px) !important;
+}
+
+body.mode-focused .style-option.selected,
+body.mode-focused .style-option.active {
+  background: rgba(99, 102, 241, 0.2) !important;
+  border-color: #818cf8 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Emotional Support buttons in focused mode */
+body.mode-focused button[onclick*="provideSupport"],
+body.mode-focused .support-btn {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+  padding: 14px 20px !important;
+  border-radius: 10px !important;
+}
+
+body.mode-focused button[onclick*="provideSupport"]:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border-color: #818cf8 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Support result message */
+body.mode-focused #support-message,
+body.mode-focused .support-message {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1)) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  border-left: 4px solid #818cf8 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Headings */
+body.mode-focused h1,
+body.mode-focused h2,
+body.mode-focused h3,
+body.mode-focused h4 {
+  color: #f1f5f9 !important;
+}
+
+body.mode-focused .greeting-title {
+  color: #f1f5f9 !important;
+}
+
+body.mode-focused .greeting-title span {
+  background: linear-gradient(135deg, #818cf8, #06b6d4) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+
+/* All body text */
+body.mode-focused p,
+body.mode-focused span:not(.brand-text):not(.gradient-text):not(.mode-icon):not(.banner-icon),
+body.mode-focused label,
+body.mode-focused div:not(.gradient-text) {
+  color: #cbd5e1;
+}
+
+body.mode-focused .greeting-subtitle {
+  color: #94a3b8 !important;
+}
+
+/* Sliders in focused mode */
+body.mode-focused input[type="range"] {
+  background: #334155 !important;
+  height: 6px !important;
+}
+
+body.mode-focused input[type="range"]::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #818cf8, #06b6d4) !important;
+  box-shadow: 0 0 0 2px #0f172a, 0 0 8px rgba(129, 140, 248, 0.5) !important;
+}
+
+/* Generated image area */
+body.mode-focused #image-result,
+body.mode-focused .image-result {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid #334155 !important;
+  border-radius: 12px !important;
+}
+
+/* Voice-to-text transcript area */
+body.mode-focused #stt-final,
+body.mode-focused .stt-transcript {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+}
+
+body.mode-focused #stt-interim {
+  color: #64748b !important;
+  font-style: italic !important;
+}
+
+/* Status indicators */
+body.mode-focused #stt-status,
+body.mode-focused .status {
+  color: #94a3b8 !important;
+}
+
+/* History grid items */
+body.mode-focused .history-item,
+body.mode-focused .grid-item {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+}
+
+body.mode-focused .history-item:hover {
+  border-color: #818cf8 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Logout button in focused mode */
+body.mode-focused .btn-logout {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+body.mode-focused .btn-logout:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+/* (Quick modal dark styles consolidated into modal section above) */
+
+/* ═══════════════════════════════════════════════
+   FLOATING SIDEBAR - MODE ADAPTIVE COLORS
+   ═══════════════════════════════════════════════ */
+
+/* CALM MODE floating buttons */
+body.mode-calm .floating-btn-games,
+body.mode-calm button[onclick*="openQuickGames"] {
+  background: linear-gradient(135deg, #8b7cb6, #b294c4) !important;
+  color: white !important;
+}
+
+body.mode-calm .floating-btn-support,
+body.mode-calm button[onclick*="openQuickSupport"] {
+  background: linear-gradient(135deg, #b294c4, #d4a5b9) !important;
+  color: white !important;
+}
+
+/* FOCUSED MODE floating buttons */
+body.mode-focused .floating-btn-games,
+body.mode-focused button[onclick*="openQuickGames"] {
+  background: linear-gradient(135deg, #6366f1, #06b6d4) !important;
+  color: white !important;
+}
+
+body.mode-focused .floating-btn-support,
+body.mode-focused button[onclick*="openQuickSupport"] {
+  background: linear-gradient(135deg, #a855f7, #ec4899) !important;
+  color: white !important;
+}
+
+/* PLAYFUL MODE floating buttons */
+body.mode-playful .floating-btn-games,
+body.mode-playful button[onclick*="openQuickGames"] {
+  background: linear-gradient(135deg, #d946ef, #f97316) !important;
+  color: white !important;
+}
+
+body.mode-playful .floating-btn-support,
+body.mode-playful button[onclick*="openQuickSupport"] {
+  background: linear-gradient(135deg, #ec4899, #fbbf24) !important;
+  color: white !important;
+}
+
+/* Hover effects enhanced per mode */
+body.mode-focused .floating-btn:hover {
+  transform: translateY(-4px) scale(1.05) !important;
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.6) !important;
+}
+
+body.mode-playful .floating-btn:hover {
+  transform: translateY(-4px) scale(1.08) rotate(-2deg) !important;
+}
+
+body.mode-calm .floating-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 28px rgba(139, 124, 182, 0.4) !important;
+}
+
+/* ═══════════════════════════════════════════════
+   FOCUSED MODE - COMPLETE DARK POLISH
+   ═══════════════════════════════════════════════ */
+
+/* Force ALL elements to respect dark theme */
+body.mode-focused {
+  background: #0f172a !important;
+  color: #e2e8f0;
+}
+
+/* Outer card containers */
+body.mode-focused .card,
+body.mode-focused .feature-card,
+body.mode-focused .tab-content,
+body.mode-focused .tab-pane {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0;
+  border-radius: 12px;
+}
+
+/* Nested panels INSIDE cards - UNIFORM (transparent, no dark patches) */
+body.mode-focused .card > div:not(button):not(a):not(input):not(textarea):not(select),
+body.mode-focused .tts-controls-panel,
+body.mode-focused .tool-preview,
+body.mode-focused .text-to-speech-content,
+body.mode-focused .tts-control-row,
+body.mode-focused .voice-controls,
+body.mode-focused .language-selector,
+body.mode-focused .form-section,
+body.mode-focused .form-group,
+body.mode-focused .input-group,
+body.mode-focused .transcript-container,
+body.mode-focused .image-section,
+body.mode-focused .options-grid,
+body.mode-focused .schedule-section,
+body.mode-focused .task-list,
+body.mode-focused [class*="-panel"],
+body.mode-focused [class*="-section"]:not(.tab-section),
+body.mode-focused [class*="-container"]:not(.dashboard-container) {
+  background: transparent !important;
+  border: none !important;
+  color: #e2e8f0;
+}
+
+/* Inputs - dark with focus glow */
+body.mode-focused input,
+body.mode-focused textarea,
+body.mode-focused select {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+  border-radius: 8px;
+}
+
+body.mode-focused input:focus,
+body.mode-focused textarea:focus,
+body.mode-focused select:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15) !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  outline: none;
+}
+
+body.mode-focused input::placeholder,
+body.mode-focused textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Labels readable */
+body.mode-focused label,
+body.mode-focused .form-label,
+body.mode-focused .field-label {
+  color: #cbd5e1 !important;
+  font-weight: 500;
+}
+
+/* Headings */
+body.mode-focused h1,
+body.mode-focused h2,
+body.mode-focused h3,
+body.mode-focused h4 {
+  color: #f1f5f9 !important;
+}
+
+body.mode-focused .section-title,
+body.mode-focused .section-header {
+  color: #818cf8 !important;
+}
+
+/* Paragraphs / descriptions */
+body.mode-focused p,
+body.mode-focused .description,
+body.mode-focused .helper-text {
+  color: #94a3b8 !important;
+}
+
+/* Emotional Support buttons */
+body.mode-focused button[onclick*="provideSupport"],
+body.mode-focused .support-btn {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+  padding: 14px 24px !important;
+  border-radius: 12px !important;
+  transition: all 0.2s !important;
+}
+
+body.mode-focused button[onclick*="provideSupport"]:hover {
+  background: rgba(99, 102, 241, 0.2) !important;
+  border-color: #818cf8 !important;
+  color: #f1f5f9 !important;
+  transform: translateY(-2px);
+}
+
+/* Support result message */
+body.mode-focused #support-message,
+body.mode-focused .support-message {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(6, 182, 212, 0.1)) !important;
+  border: 1px solid rgba(99, 102, 241, 0.3) !important;
+  border-left: 4px solid #818cf8 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Style picker buttons */
+body.mode-focused .style-option,
+body.mode-focused button[data-style],
+body.mode-focused .option-btn {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+body.mode-focused .style-option:hover,
+body.mode-focused button[data-style]:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border-color: #818cf8 !important;
+  color: #818cf8 !important;
+}
+
+body.mode-focused .style-option.selected,
+body.mode-focused .style-option.active {
+  background: rgba(99, 102, 241, 0.25) !important;
+  border-color: #818cf8 !important;
+  color: #f1f5f9 !important;
+}
+
+/* Sliders */
+body.mode-focused input[type="range"] {
+  background: #334155 !important;
+  height: 6px !important;
+}
+
+body.mode-focused input[type="range"]::-webkit-slider-thumb {
+  background: linear-gradient(135deg, #818cf8, #06b6d4) !important;
+  border: 2px solid #0f172a !important;
+  box-shadow: 0 0 10px rgba(129, 140, 248, 0.5) !important;
+}
+
+/* Status/output displays */
+body.mode-focused #stt-status,
+body.mode-focused .status,
+body.mode-focused .status-display {
+  background: rgba(15, 23, 42, 0.5) !important;
+  color: #94a3b8 !important;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+/* Transcript / output text areas */
+body.mode-focused #stt-final,
+body.mode-focused #stt-interim,
+body.mode-focused .transcript,
+body.mode-focused .transcript-output {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+  padding: 16px !important;
+  border-radius: 8px !important;
+}
+
+body.mode-focused #stt-interim {
+  color: #64748b !important;
+  font-style: italic;
+}
+
+/* Image generation areas */
+body.mode-focused #image-result,
+body.mode-focused .image-result,
+body.mode-focused #image-history {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+}
+
+/* Task items in scheduler */
+body.mode-focused .task-item,
+body.mode-focused .schedule-item {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  margin-bottom: 8px !important;
+}
+
+body.mode-focused .task-item h4,
+body.mode-focused .task-title {
+  color: #f1f5f9 !important;
+}
+
+body.mode-focused .task-item .time,
+body.mode-focused .task-time {
+  color: #94a3b8 !important;
+}
+
+/* "Add Task" button */
+body.mode-focused .add-task-btn,
+body.mode-focused button[onclick*="addTask"] {
+  background: linear-gradient(135deg, #6366f1, #06b6d4) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* Catch inline white/light backgrounds */
+body.mode-focused [style*="background: white"],
+body.mode-focused [style*="background:#fff"],
+body.mode-focused [style*="background-color: white"],
+body.mode-focused [style*="background-color:#fff"],
+body.mode-focused [style*="background: rgba(255, 255, 255"],
+body.mode-focused [style*="background-color: rgba(255, 255, 255"] {
+  background: #1e293b !important;
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+/* Floating sidebar in focused mode - both buttons match dark theme */
+body.mode-focused .floating-btn-games,
+body.mode-focused button[onclick*="openQuickGames"],
+body.mode-focused .floating-btn[onclick*="Games"] {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5) !important;
+  color: white !important;
+  border: none !important;
+}
+
+body.mode-focused .floating-btn-support,
+body.mode-focused button[onclick*="openQuickSupport"],
+body.mode-focused .floating-btn[onclick*="Support"] {
+  background: linear-gradient(135deg, #818cf8 0%, #06b6d4 100%) !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.5) !important;
+  color: white !important;
+  border: none !important;
+}
+
+/* Empty state text in focused mode */
+body.mode-focused .empty-state-title,
+body.mode-focused .empty-state-text {
+  color: #94a3b8 !important;
+}
+
+body.mode-focused .empty-state-icon {
+  opacity: 0.6;
+}
+
+/* History grids */
+body.mode-focused .history-grid,
+body.mode-focused .history-section {
+  background: rgba(15, 23, 42, 0.4) !important;
+}
+
+body.mode-focused .history-item {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border: 1px solid #334155 !important;
+}
+
+body.mode-focused .history-item:hover {
+  border-color: #818cf8 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* Logout button in focused mode */
+body.mode-focused .btn-logout {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid #334155 !important;
+  color: #cbd5e1 !important;
+}
+
+body.mode-focused .btn-logout:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+/* Inline color overrides for focused mode */
+body.mode-focused [style*="color: #333"],
+body.mode-focused [style*="color: #6B5B95"],
+body.mode-focused [style*="color: #8B7AA8"],
+body.mode-focused [style*="color: #888"],
+body.mode-focused [style*="color: #999"] {
+  color: #94a3b8 !important;
+}
+
+/* TTS sections */
+body.mode-focused #tts-controls,
+body.mode-focused .tts-section,
+body.mode-focused .voice-settings,
+body.mode-focused #voice-selector,
+body.mode-focused .tts-buttons-container {
+  background: rgba(30, 41, 59, 0.85) !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+  border-radius: 15px !important;
+}
+
+/* Image generation sections */
+body.mode-focused #image-prompt-section,
+body.mode-focused .image-prompt-container,
+body.mode-focused .image-output {
+  background: rgba(30, 41, 59, 0.85) !important;
+  border: 1px solid #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Result/output areas */
+body.mode-focused .result-area,
+body.mode-focused .output-area,
+body.mode-focused #generated-image-container {
+  background: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid #334155 !important;
+}
+
+/* Status/info displays */
+body.mode-focused .info-display,
+body.mode-focused #image-status {
+  background: rgba(15, 23, 42, 0.5) !important;
+  color: #94a3b8 !important;
+  border: 1px solid #334155 !important;
+}
+
+/* The transcript frame div (has inline style with rgba(255,255,255,0.7)) */
+body.mode-focused .tab-pane div[style*="rgba(255"] {
+  background: rgba(30, 41, 59, 0.85) !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Hide tab nav scrollbar */
+.tab-nav {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.tab-nav::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ═══════ IMAGE TOOL BUTTONS - ACTIVE STATE ═══════ */
+
+.tool-btn {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: #6b46c1 !important;
+  border: 1.5px solid transparent !important;
+  padding: 12px 20px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+
+.tool-btn:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  border-color: #818cf8 !important;
+}
+
+.tool-btn.active,
+.tool-btn.btn-primary {
+  background: linear-gradient(135deg, #6366f1, #06b6d4) !important;
+  color: white !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+}
+
+/* Focused mode adjustments for tool buttons */
+body.mode-focused .tool-btn {
+  background: rgba(30, 41, 59, 0.6) !important;
+  color: #cbd5e1 !important;
+  border-color: #334155 !important;
+}
+
+body.mode-focused .tool-btn:hover {
+  background: rgba(99, 102, 241, 0.2) !important;
+  border-color: #818cf8 !important;
+  color: #818cf8 !important;
+}
+
+body.mode-focused .tool-btn.active,
+body.mode-focused .tool-btn.btn-primary {
+  background: linear-gradient(135deg, #6366f1, #06b6d4) !important;
+  color: white !important;
+  border-color: transparent !important;
+}

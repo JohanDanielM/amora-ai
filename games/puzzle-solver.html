@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/public/logo.png">
+    <link rel="apple-touch-icon" href="/public/logo.png">
+    <meta property="og:image" content="/public/logo.png">
+    <meta property="og:title" content="AMORA.AI - AI for Neurodivergent Minds">
+    <meta property="og:description" content="Adaptive AI tools for creativity, focus, and emotional wellness">
     <title>Puzzle Solver | AMORA.AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -247,6 +252,19 @@
                 padding: 1.5rem;
             }
         }
+        .game-title-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex: 1;
+        }
+        .game-logo {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
@@ -254,7 +272,10 @@
         <a href="/dashboard.html" class="btn btn-ghost">
             ← Back to Dashboard
         </a>
-        <h1 class="game-title">Puzzle Solver</h1>
+        <div class="game-title-wrap">
+            <img src="/public/logo.png" alt="AMORA.AI Logo" class="game-logo" />
+            <h1 class="game-title">Puzzle Solver</h1>
+        </div>
         <div class="game-score">
             Score: <span id="score-correct">0</span>
         </div>

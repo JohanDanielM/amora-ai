@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images.png" alt="AMORA.AI Logo" width="120" />
+  <img src="public/logo.png" alt="AMORA.AI Logo" width="120" />
 </p>
 
 <h1 align="center">AMORA.AI</h1>
@@ -13,6 +13,18 @@
   <img alt="Node.js" src="https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
   <img alt="License" src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge">
 </p>
+
+---
+
+## 💜 Built for Neurodivergent Minds
+
+AMORA.AI is thoughtfully designed to empower neurodivergent individuals (such as those with ADHD, Autism, sensory sensitivities, or anxiety) by providing an adaptive, personalized workspace:
+
+- **Personalization Quiz**: Adjusts system behavior and preferences based on user needs.
+- **Dynamic Interface Styles**: Choose from **Calm & Minimal** (reduced saturation, prefers-reduced-motion support to limit sensory overload), **Bright & Engaging** (vibrant visuals), or **Modern & Futuristic** layouts.
+- **Adaptive Interaction Modes**: Optimize the dashboard for Text, Voice (Speech-to-Text), Image, or Multimodal starting points.
+- **Tailored Emotional Support**: Receive motivational quotes, positive affirmations, and relaxation exercises structured to your preferred response detail level (short, detailed, visual, or flexible).
+- **Proactive Banners**: Smart, dismissible, daily State of Mind banners recommend personalized activities (e.g. suggesting calming visualizations when feeling tired).
 
 ---
 

@@ -13,6 +13,15 @@ const authRoutes = require('./routes/auth');
 const apiRoutes = require('./routes/api');
 const { ensureAuthenticated } = require('./middleware/authMiddleware');
 
+// Global process error handlers to prevent crashes
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION - Server stayed alive:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('UNHANDLED REJECTION at:', promise, 'reason:', reason);
+});
+
 const app = express();
 app.set('trust proxy', 1); // Required for secure cookies behind Render's reverse proxy
 const PORT = process.env.PORT || 3000;
@@ -62,7 +71,8 @@ app.get('/api/user', (req, res) => {
                 displayName: req.user.displayName,
                 email: req.user.email,
                 avatar: req.user.avatar,
-                provider: req.user.provider
+                provider: req.user.provider,
+                preferences: req.user.preferences || null
             }
         });
     } else {

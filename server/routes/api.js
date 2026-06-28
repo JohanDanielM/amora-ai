@@ -211,4 +211,39 @@ router.post('/batch-generate',
     }
 );
 
+// POST /api/save-preferences
+router.post('/save-preferences', ensureAuthenticatedAPI, async (req, res) => {
+  try {
+    console.log('[save-preferences] Request received');
+    console.log('[save-preferences] User:', req.user?.id);
+    console.log('[save-preferences] Body:', req.body);
+    
+    const { preferences } = req.body;
+    
+    if (!preferences || typeof preferences !== 'object') {
+      console.warn('[save-preferences] Invalid preferences');
+      return res.status(400).json({ error: 'Invalid preferences' });
+    }
+    
+    if (!req.user || !req.user.id) {
+      console.error('[save-preferences] User missing ID');
+      return res.status(401).json({ error: 'User not authenticated properly' });
+    }
+    
+    console.log('[save-preferences] Calling updateUserPreferences...');
+    const userStore = require('../utils/userStore');
+    await userStore.updateUserPreferences(req.user.id, preferences);
+    console.log('[save-preferences] Update complete, sending response');
+    
+    // Also update the session user object so the change is immediate
+    req.user.preferences = preferences;
+    
+    return res.status(200).json({ success: true });
+  } catch (err) {
+    console.error('[save-preferences] CRITICAL ERROR:', err);
+    console.error('[save-preferences] Stack:', err.stack);
+    return res.status(500).json({ error: 'Could not save preferences', details: err.message });
+  }
+});
+
 module.exports = router;

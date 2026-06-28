@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const USERS_FILE = path.join(__dirname, '../../data/users.json');
 
-// Ensure database file and directory exist safely
+// Ensure database file and directory exist safely (sync)
 function ensureDirAndFile() {
     try {
         const dir = path.dirname(USERS_FILE);
@@ -22,7 +22,7 @@ function ensureDirAndFile() {
     }
 }
 
-// Safely read all users from data/users.json
+// Safely read all users from data/users.json (sync)
 function readUsers() {
     ensureDirAndFile();
     try {
@@ -34,7 +34,7 @@ function readUsers() {
     }
 }
 
-// Safely write users array to data/users.json
+// Safely write users array to data/users.json (sync)
 function writeUsers(users) {
     ensureDirAndFile();
     try {
@@ -42,6 +42,32 @@ function writeUsers(users) {
     } catch (error) {
         console.error('Error writing users to storage:', error);
     }
+}
+
+// Async-safe loadUsers
+async function loadUsers() {
+  try {
+    const data = await fs.promises.readFile(USERS_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    if (err.code === 'ENOENT') return []; // File doesn't exist
+    throw err;
+  }
+}
+
+// Async-safe saveUsers with atomic write
+async function saveUsers(users) {
+  try {
+    const dir = path.dirname(USERS_FILE);
+    await fs.promises.mkdir(dir, { recursive: true });
+    
+    const tempFile = USERS_FILE + '.tmp';
+    await fs.promises.writeFile(tempFile, JSON.stringify(users, null, 2), 'utf8');
+    await fs.promises.rename(tempFile, USERS_FILE);
+  } catch (err) {
+    console.error('Failed to save users:', err);
+    throw err;
+  }
 }
 
 // Find user by email
@@ -79,10 +105,8 @@ function saveUser(user) {
     const users = readUsers();
     const index = users.findIndex(u => u.id === user.id);
     if (index !== -1) {
-        // update
         users[index] = { ...users[index], ...user };
     } else {
-        // insert
         users.push(user);
     }
     writeUsers(users);
@@ -140,7 +164,41 @@ function clearResetCode(email) {
     return false;
 }
 
+// Async-safe updateUserPreferences
+async function updateUserPreferences(userId, preferences) {
+  try {
+    console.log('[userStore] updateUserPreferences called for:', userId);
+    
+    if (!userId) {
+      throw new Error('userId is required');
+    }
+    
+    const users = await loadUsers();
+    console.log('[userStore] Loaded users count:', users.length);
+    
+    const user = users.find(u => u.id === userId);
+    
+    if (!user) {
+      console.warn('[userStore] User not found:', userId);
+      throw new Error('User not found');
+    }
+    
+    console.log('[userStore] Updating user preferences');
+    user.preferences = preferences;
+    
+    await saveUsers(users);
+    console.log('[userStore] Save complete');
+    
+    return user;
+  } catch (err) {
+    console.error('[userStore] updateUserPreferences error:', err);
+    throw err;
+  }
+}
+
 module.exports = {
+    loadUsers,
+    saveUsers,
     getUserByEmail,
     getUserById,
     createUser,
@@ -148,5 +206,6 @@ module.exports = {
     setResetCode,
     validateResetCode,
     updatePassword,
-    clearResetCode
+    clearResetCode,
+    updateUserPreferences
 };

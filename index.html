@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/public/logo.png">
+    <link rel="apple-touch-icon" href="/public/logo.png">
+    <meta property="og:image" content="/public/logo.png">
+    <meta property="og:title" content="AMORA.AI - AI for Neurodivergent Minds">
+    <meta property="og:description" content="Adaptive AI tools for creativity, focus, and emotional wellness">
     <title>amora.ai</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,6 +16,19 @@
     <link rel="stylesheet" href="/src/styles/design-tokens.css">
     <link rel="stylesheet" href="/src/styles/main.css">
     <script src="/src/scripts/toast.js"></script>
+    <style>
+      .hero-logo {
+        text-align: center;
+        margin-bottom: var(--space-4);
+      }
+      .hero-logo img {
+        width: 80px;
+        height: 80px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        animation: slideUp 0.5s ease;
+      }
+    </style>
 </head>
 <body>
   <section class="hero">
@@ -20,6 +38,9 @@
     <div class="floating-shape shape-4"></div>
     
     <div class="hero-content">
+      <div class="hero-logo">
+        <img src="/public/logo.png" alt="AMORA.AI" />
+      </div>
       <div class="badge">✨ AI-Powered Companion</div>
       
       <h1 class="hero-title">

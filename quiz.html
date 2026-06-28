@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/public/logo.png">
+    <link rel="apple-touch-icon" href="/public/logo.png">
+    <meta property="og:image" content="/public/logo.png">
+    <meta property="og:title" content="AMORA.AI - AI for Neurodivergent Minds">
+    <meta property="og:description" content="Adaptive AI tools for creativity, focus, and emotional wellness">
     <title>Quiz - amora.ai</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,11 +16,45 @@
     <link rel="stylesheet" href="/src/styles/design-tokens.css">
     <link rel="stylesheet" href="/src/styles/main.css">
     <script src="/src/scripts/toast.js"></script>
+    <style>
+        .quiz-progress-container {
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        .quiz-progress {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 9999px;
+            height: 10px;
+            overflow: hidden;
+        }
+        .quiz-progress-bar {
+            background: linear-gradient(135deg, #6b46c1, #ec4899);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 9999px;
+        }
+        .quiz-progress-text {
+            display: block;
+            text-align: right;
+            font-size: 0.875rem;
+            color: #4a5568;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+    </style>
 </head>
 <body>
     <div class="quiz-page">
         <a href="/" class="back-link">← Back to Home</a>
         <div class="quiz-container">
+            <div class="quiz-progress-container">
+                <div class="quiz-progress">
+                    <div class="quiz-progress-bar" id="quizProgressBar" style="width: 0%"></div>
+                </div>
+                <span class="quiz-progress-text" id="quizProgressText">0 / 5</span>
+            </div>
             <h1 class="quiz-title">AMORA.AI wants to know....</h1>
             
             <!-- Question 1 -->
@@ -112,8 +151,8 @@
 
             <!-- Completion Message -->
             <div class="completion-box" id="completionBox">
-                <h2>Thank you!</h2>
-                <p>Your preferences have been saved.</p>
+                <h2>✨ Preferences saved!</h2>
+                <p>Redirecting you to sign up...</p>
             </div>
         </div>
     </div>

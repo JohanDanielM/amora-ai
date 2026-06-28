@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/public/logo.png">
+    <link rel="apple-touch-icon" href="/public/logo.png">
+    <meta property="og:image" content="/public/logo.png">
+    <meta property="og:title" content="AMORA.AI - AI for Neurodivergent Minds">
+    <meta property="og:description" content="Adaptive AI tools for creativity, focus, and emotional wellness">
     <title>Dashboard - amora.ai</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -812,6 +817,103 @@
         .dashboard-page {
             padding-top: 3.5rem;
         }
+
+        .brand-icon-img {
+            width: 24px;
+            height: 24px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 4px;
+        }
+
+        /* State of Mind Banner Styles */
+        .som-banner {
+            background: linear-gradient(135deg, rgba(107, 91, 149, 0.08), rgba(236, 72, 153, 0.08));
+            border: 1px solid rgba(107, 91, 149, 0.15);
+            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem auto;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 4px 15px rgba(107, 70, 193, 0.03);
+            animation: slideUp 0.5s ease;
+        }
+        .som-banner-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            text-align: left;
+        }
+        .som-banner-icon {
+            font-size: 2rem;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+        }
+        .som-banner-text-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .som-banner-text-wrap strong {
+            color: #6B5B95;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .som-banner-text-wrap p {
+            color: #555;
+            font-size: 0.925rem;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .som-banner-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+        .som-action-btn {
+            padding: 0.5rem 1.25rem !important;
+            font-size: 0.875rem !important;
+            border-radius: 10px !important;
+            height: auto !important;
+            font-weight: 600 !important;
+            white-space: nowrap;
+        }
+        .som-banner-dismiss {
+            background: none;
+            border: none;
+            color: #8B7AA8;
+            font-size: 1.75rem;
+            font-weight: 300;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .som-banner-dismiss:hover {
+            color: #6B5B95;
+        }
+        @media (max-width: 768px) {
+            .som-banner {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+                padding: 1.25rem;
+                text-align: center;
+            }
+            .som-banner-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .som-banner-actions {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -819,12 +921,44 @@
     <div class="user-bar">
       <div class="brand-area">
         <div class="brand-logo">
-          <span class="brand-icon">✨</span>
+          <img src="/public/logo.png" alt="AMORA.AI" class="brand-icon-img" />
           <span class="brand-text">AMORA<span class="brand-dot">.</span>AI</span>
         </div>
       </div>
       
       <div class="user-area">
+        <!-- Mode Switcher -->
+        <div class="mode-switcher">
+          <button class="mode-switcher-btn" onclick="toggleModeMenu()" id="modeSwitcherBtn">
+            <span class="mode-icon" id="currentModeIcon">🌿</span>
+            <span class="mode-label" id="currentModeLabel">Calm Mode</span>
+            <span class="mode-arrow">▾</span>
+          </button>
+          <div class="mode-menu" id="modeMenu" style="display:none;">
+            <button class="mode-option" onclick="switchMode('calm')">
+              <span style="font-size:24px;">🌿</span>
+              <div style="flex:1;text-align:left;">
+                <strong>Calm Mode</strong>
+                <small style="display:block;color:#888;">Soft & gentle</small>
+              </div>
+            </button>
+            <button class="mode-option" onclick="switchMode('focused')">
+              <span style="font-size:24px;">⚡</span>
+              <div style="flex:1;text-align:left;">
+                <strong>Focused Mode</strong>
+                <small style="display:block;color:#888;">Dark & sharp</small>
+              </div>
+            </button>
+            <button class="mode-option" onclick="switchMode('playful')">
+              <span style="font-size:24px;">✨</span>
+              <div style="flex:1;text-align:left;">
+                <strong>Playful Mode</strong>
+                <small style="display:block;color:#888;">Vibrant & fun</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
         <div class="user-info">
           <div class="user-avatar-wrapper">
             <div id="user-avatar" class="avatar-circle">A</div>
@@ -861,6 +995,21 @@
                 <p class="greeting-subtitle">
                     Explore AI-powered tools to boost your creativity and productivity
                 </p>
+            </div>
+
+            <!-- Personalized State of Mind Banner -->
+            <div id="stateOfMindBanner" class="som-banner" style="display: none;">
+                <div class="som-banner-content">
+                    <span id="somBannerIcon" class="som-banner-icon"></span>
+                    <div class="som-banner-text-wrap">
+                        <strong id="somBannerTitle"></strong>
+                        <p id="somBannerMessage"></p>
+                    </div>
+                </div>
+                <div class="som-banner-actions">
+                    <button id="somBannerActionButton" class="btn btn-primary btn-sm som-action-btn" onclick="handleSomAction(this)"></button>
+                    <button class="som-banner-dismiss" onclick="dismissSomBanner(event)" aria-label="Dismiss banner">×</button>
+                </div>
             </div>
 
             <!-- Tab Navigation -->
@@ -2190,7 +2339,7 @@
                             hr { border: 0; border-top: 1px solid #ddd; margin: 20px 0; }
                         </style>
                     </head>
-                    <body>
+                    <body class="mode-focused">
                         <h1>AMORA.AI Voice Transcript</h1>
                         <p><em>Generated: ${new Date().toLocaleString()}</em></p>
                         <hr/>
@@ -2251,17 +2400,21 @@
             const targetPane = document.getElementById(`subtab-${tabName}`);
             if (targetPane) targetPane.style.display = 'block';
 
-            // Reset selector buttons background
+            // Update selector button classes for active state
             const buttons = ['editor', 'style', 'batch'];
             buttons.forEach(btn => {
                 const buttonEl = document.getElementById(`btn-subtab-${btn}`);
                 if (buttonEl) {
                     if (btn === tabName) {
-                        buttonEl.style.background = 'linear-gradient(135deg, #6B5B95, #8B7AA8)';
-                        buttonEl.style.color = 'white';
+                        buttonEl.classList.add('active', 'btn-primary');
+                        buttonEl.classList.remove('btn-secondary');
+                        buttonEl.style.background = '';
+                        buttonEl.style.color = '';
                     } else {
-                        buttonEl.style.background = 'rgba(107, 91, 149, 0.15)';
-                        buttonEl.style.color = '#6B5B95';
+                        buttonEl.classList.remove('active', 'btn-primary');
+                        buttonEl.classList.add('btn-secondary');
+                        buttonEl.style.background = '';
+                        buttonEl.style.color = '';
                     }
                 }
             });
@@ -2666,12 +2819,39 @@
             const list = messages[type] || messages.motivation;
             const random = list[Math.floor(Math.random() * list.length)];
             
+            let finalMsg = random;
+            if (currentUserPreferences && currentUserPreferences.responseStyle) {
+                const style = currentUserPreferences.responseStyle;
+                if (style === 'short') {
+                    finalMsg = random.split('.')[0] + '.';
+                } else if (style === 'detailed') {
+                    const details = {
+                        motivation: " Keep taking it one step at a time, celebrating small victories along the way.",
+                        calm: " Give yourself permission to pause. You don't have to carry it all right now.",
+                        happy: " Take a moment to think of one small thing that made you smile today.",
+                        focus: " You have the strength to filter out the noise. Just start with the next five minutes."
+                    };
+                    finalMsg = random + (details[type] || "");
+                } else if (style === 'visual') {
+                    const visualAccents = {
+                        motivation: "✨ {msg} 💪🌟",
+                        calm: "🌊 {msg} 🧘🍃",
+                        happy: "☀️ {msg} 😊🌸",
+                        focus: "🎯 {msg} ⚡💎"
+                    };
+                    const pattern = visualAccents[type] || "✨ {msg} ✨";
+                    finalMsg = pattern.replace('{msg}', random);
+                } else if (style === 'flexible') {
+                    finalMsg = "💜 " + random + " Remember to trust your journey.";
+                }
+            }
+            
             // Show message in the support message area
             const msgEl = document.getElementById('support-message');
             const textEl = document.getElementById('support-text');
             
             if (msgEl && textEl) {
-                textEl.textContent = random;
+                textEl.textContent = finalMsg;
                 msgEl.style.display = 'block';
                 msgEl.style.animation = 'none';
                 setTimeout(() => {
@@ -2722,21 +2902,423 @@
             // Update greeting name if exists
             const greetingName = document.getElementById('user-greeting-name');
             if (greetingName) greetingName.textContent = firstName;
+
+            // Apply preferences if available
+            if (user.preferences) {
+                applyPreferences(user.preferences);
+            } else {
+                // If backend does not have preferences, check if we have them locally in localStorage
+                const localPrefs = localStorage.getItem('amoraPreferences');
+                if (localPrefs) {
+                    try {
+                        const parsed = JSON.parse(localPrefs);
+                        // Sync to backend asynchronously
+                        fetch('/api/save-preferences', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ preferences: parsed })
+                        })
+                        .then(() => {
+                            console.log('Synced local preferences to account.');
+                            localStorage.removeItem('amoraPreferences');
+                        })
+                        .catch(err => console.error('Error syncing preferences:', err));
+                        
+                        // Apply them now
+                        applyPreferences(parsed);
+                    } catch (e) {
+                        console.error('Failed to parse local preferences:', e);
+                    }
+                }
+            }
           } catch (e) {
             console.log('User info load failed');
           }
         }
 
-        // Call on page load
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', loadUserInfo);
-        } else {
-          loadUserInfo();
-        }
+        // Call on page load & save pending preferences from quiz (OAuth flow)
+        document.addEventListener('DOMContentLoaded', async () => {
+          // Save any pending preferences from quiz (OAuth flow)
+          const pending = localStorage.getItem('amoraPreferences');
+          if (pending) {
+            try {
+              const response = await fetch('/api/save-preferences', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                credentials: 'include',
+                body: JSON.stringify({ preferences: JSON.parse(pending) })
+              });
+              if (response.ok) {
+                localStorage.removeItem('amoraPreferences');
+                console.log('[DASHBOARD] Pending prefs saved');
+              }
+            } catch (e) {
+              console.error('[DASHBOARD] Pending prefs save failed:', e);
+            }
+          }
+          
+          // Then load user info
+          await loadUserInfo();
+        });
 
         function logout() {
           window.location.href = '/auth/logout';
         }
+
+        // ========== Neurodivergent Personalization Pipeline ==========
+        
+        const stateOfMindBanners = {
+            focused: {
+                icon: "⚡",
+                title: "You're in the zone!",
+                message: "Ready to capture your thoughts? Try using Voice-to-Text to quickly transcribe your ideas.",
+                btnText: "Start Voice Input",
+                tabId: "voice-to-text"
+            },
+            calm: {
+                icon: "🌊",
+                title: "Serene & Relaxed",
+                message: "Perfect mindset for some creative visualization. Try generating a peaceful AI image.",
+                btnText: "Create Art",
+                tabId: "text-to-image"
+            },
+            tired: {
+                icon: "💜",
+                title: "Taking it easy",
+                message: "Need a moment to unwind or chat? Check out the emotional support area for positive vibes.",
+                btnText: "Get Support",
+                tabId: "emotional-support"
+            },
+            curious: {
+                icon: "🧩",
+                title: "Curious Minds",
+                message: "Ready for a fun mental workout? Engage with our AI-powered games.",
+                btnText: "Play Games",
+                tabId: "games"
+            }
+        };
+
+        let currentUserPreferences = null;
+
+        function applyPreferences(prefs) {
+          if (!prefs) {
+            console.log('[Mode] No preferences, applying default calm mode');
+            prefs = {};
+          }
+          
+          console.log('[Mode] Applying preferences:', prefs);
+          currentUserPreferences = prefs;
+          window.userPreferences = prefs;
+          
+          // Determine mode (interfaceStyle takes priority)
+          let targetMode = null;
+          
+          if (prefs.interfaceStyle) {
+            const styleMap = {
+              'calm': 'calm',
+              'modern': 'focused',
+              'bright': 'playful'
+            };
+            targetMode = styleMap[prefs.interfaceStyle];
+          }
+          
+          // Fall back to stateOfMind
+          if (!targetMode && prefs.stateOfMind) {
+            const stateMap = {
+              'calm': 'calm',
+              'tired': 'calm',
+              'focused': 'focused',
+              'curious': 'playful'
+            };
+            targetMode = stateMap[prefs.stateOfMind];
+          }
+          
+          // Default if nothing matches
+          if (!targetMode) targetMode = 'calm';
+          
+          // Apply the mode
+          document.body.classList.remove('mode-calm', 'mode-focused', 'mode-playful', 'style-calm', 'style-bright', 'style-modern');
+          document.body.classList.add(`mode-${targetMode}`);
+          
+          // Maintain original style-* classes for compatibility
+          const reverseStyleMap = {
+            calm: 'style-calm',
+            focused: 'style-modern',
+            playful: 'style-bright'
+          };
+          document.body.classList.add(reverseStyleMap[targetMode]);
+          
+          console.log('[Mode] Applied mode:', targetMode);
+          console.log('[MODE] Applied body classes:', document.body.className);
+          
+          // Update mode switcher label if exists
+          const modeConfig = {
+            calm: { icon: '🌿', label: 'Calm Mode' },
+            focused: { icon: '⚡', label: 'Focused Mode' },
+            playful: { icon: '✨', label: 'Playful Mode' }
+          };
+          
+          const config = modeConfig[targetMode];
+          const iconEl = document.getElementById('currentModeIcon');
+          const labelEl = document.getElementById('currentModeLabel');
+          if (iconEl) iconEl.textContent = config.icon;
+          if (labelEl) labelEl.textContent = config.label;
+          
+          // Switch to default tab for this mode
+          const defaultTabs = {
+            calm: 'emotional-support',
+            focused: 'voice-to-text',
+            playful: 'games'
+          };
+          
+          setTimeout(() => {
+            const tabBtn = document.querySelector(`.tab-nav-btn[data-tab="${defaultTabs[targetMode]}"]`);
+            if (tabBtn) {
+              tabBtn.click();
+              console.log('[Mode] Switch default tab via click:', defaultTabs[targetMode]);
+            }
+          }, 400);
+          
+          // TTS notification
+          if (prefs.wantsTTS) {
+            const ttsText = document.getElementById('tts-text');
+            if (ttsText && !ttsText.value.trim()) {
+                ttsText.value = "Welcome back to AMORA.AI";
+            }
+            const ttsVoice = document.getElementById('tts-voice');
+            if (ttsVoice && ttsVoice.options.length > 0) {
+                const englishVoiceIdx = Array.from(ttsVoice.options).findIndex(o => o.text.toLowerCase().includes('english') || o.text.toLowerCase().includes('en-'));
+                if (englishVoiceIdx !== -1) {
+                    ttsVoice.selectedIndex = englishVoiceIdx;
+                }
+            }
+            setTimeout(() => {
+              if (window.showToast) {
+                showToast('🔊 Text-to-Speech is enabled per your preferences', 'info', 4000);
+              }
+            }, 1000);
+          }
+
+          // State of Mind Banner
+          const dismissedDate = localStorage.getItem('bannerDismissed');
+          if (dismissedDate !== new Date().toDateString()) {
+              const bannerData = stateOfMindBanners[prefs.stateOfMind];
+              if (bannerData) {
+                  const banner = document.getElementById('stateOfMindBanner');
+                  const iconBannerEl = document.getElementById('somBannerIcon');
+                  const titleEl = document.getElementById('somBannerTitle');
+                  const msgEl = document.getElementById('somBannerMessage');
+                  const actionBtn = document.getElementById('somBannerActionButton');
+
+                  if (banner && iconBannerEl && titleEl && msgEl && actionBtn) {
+                      iconBannerEl.textContent = bannerData.icon;
+                      titleEl.textContent = bannerData.title;
+                      msgEl.textContent = bannerData.message;
+                      actionBtn.textContent = bannerData.btnText;
+                      actionBtn.setAttribute('data-tab', bannerData.tabId);
+                      banner.style.display = 'flex';
+                  }
+              }
+          }
+        }
+
+        window.handleSomAction = function(btn) {
+            const targetTab = btn.getAttribute('data-tab');
+            if (targetTab) {
+                switchTab(targetTab);
+            }
+        };
+
+        window.dismissSomBanner = function(event) {
+            if (event) event.preventDefault();
+            const banner = document.getElementById('stateOfMindBanner');
+            if (banner) {
+                banner.style.display = 'none';
+            }
+            localStorage.setItem('bannerDismissed', new Date().toDateString());
+        };
+
+        // ========== Mode-based Default Tab Setting ==========
+        function setDefaultTabByMode() {
+          let mode = null;
+          if (document.body.classList.contains('mode-calm')) mode = 'calm';
+          else if (document.body.classList.contains('mode-focused')) mode = 'focused';
+          else if (document.body.classList.contains('mode-playful')) mode = 'playful';
+          
+          if (!mode) return;
+          
+          const defaultTabs = {
+            calm: 'emotional-support',
+            focused: 'voice-to-text',
+            playful: 'games'
+          };
+          
+          const targetTab = defaultTabs[mode];
+          if (!targetTab) return;
+          
+          setTimeout(() => {
+            const tabBtn = document.querySelector(`.tab-nav-btn[data-tab="${targetTab}"]`);
+            if (tabBtn) {
+              tabBtn.click();
+              console.log('[Mode] Default tab set to:', targetTab);
+            }
+          }, 400);
+        }
+
+        // ========== Floating Sidebar Access ==========
+        window.openQuickGames = function() {
+          const modal = document.getElementById('quickGamesModal');
+          if (modal) {
+            modal.classList.add('show');
+            modal.style.display = ''; // Remove any inline display
+          }
+        };
+
+        window.openQuickSupport = function() {
+          const modal = document.getElementById('quickSupportModal');
+          if (modal) {
+            modal.classList.add('show');
+            modal.style.display = '';
+            const msg = document.getElementById('quickSupportMessage');
+            if (msg) msg.style.display = 'none';
+          }
+        };
+
+        window.closeQuickModal = function(modalId) {
+          const modal = document.getElementById(modalId);
+          if (modal) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+          }
+        };
+
+        // Close on backdrop click
+        document.addEventListener('click', function(e) {
+          if (e.target.classList && e.target.classList.contains('quick-modal')) {
+            e.target.classList.remove('show');
+            e.target.style.display = 'none';
+          }
+        });
+
+        // Close on ESC
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            document.querySelectorAll('.quick-modal.show').forEach(m => {
+              m.classList.remove('show');
+              m.style.display = 'none';
+            });
+          }
+        });
+
+        window.quickProvideSupport = function(type) {
+            const messages = {
+                motivation: [
+                    "You're stronger than you think. Every step counts! 💪",
+                    "Believe in yourself. You have the power to overcome anything. ✨",
+                    "Small steps every day lead to big changes. Keep going! 🚀"
+                ],
+                calm: [
+                    "Take a deep breath. Inhale peace, exhale tension. 🧘",
+                    "Slow down. The world will wait for you. 🌊",
+                    "Close your eyes for 10 seconds. You deserve a pause. 🍃"
+                ],
+                happy: [
+                    "Smile! You bring light to those around you. 😊",
+                    "Find joy in small moments. They add up to a beautiful life. 🌸",
+                    "Today is a gift. You are doing amazing. ☀️"
+                ],
+                focus: [
+                    "One task at a time. Clear your mind, and just start. 🎯",
+                    "Eliminate the noise. Focus on what truly matters. ⚡",
+                    "Commit to just five minutes. You've got this! 💎"
+                ]
+            };
+            const list = messages[type] || messages.motivation;
+            const msg = list[Math.floor(Math.random() * list.length)];
+            
+            const msgBox = document.getElementById('quickSupportMessage');
+            if (msgBox) {
+                msgBox.textContent = msg;
+                msgBox.style.display = 'block';
+            }
+        };
+
+        // ========== Mode Switcher Interactivity ==========
+        window.toggleModeMenu = function() {
+          const menu = document.getElementById('modeMenu');
+          if (menu) {
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+          }
+        };
+
+        window.switchMode = async function(mode) {
+          document.body.classList.remove('mode-calm', 'mode-focused', 'mode-playful', 'style-calm', 'style-bright', 'style-modern');
+          document.body.classList.add(`mode-${mode}`);
+          
+          const reverseStyleMap = {
+            calm: 'style-calm',
+            focused: 'style-modern',
+            playful: 'style-bright'
+          };
+          document.body.classList.add(reverseStyleMap[mode]);
+          
+          const modeConfig = {
+            calm: { icon: '🌿', label: 'Calm Mode', tab: 'emotional-support' },
+            focused: { icon: '⚡', label: 'Focused Mode', tab: 'voice-to-text' },
+            playful: { icon: '✨', label: 'Playful Mode', tab: 'games' }
+          };
+          
+          const config = modeConfig[mode];
+          document.getElementById('currentModeIcon').textContent = config.icon;
+          document.getElementById('currentModeLabel').textContent = config.label;
+          document.getElementById('modeMenu').style.display = 'none';
+          
+          // Switch to default tab
+          setTimeout(() => {
+            const tabBtn = document.querySelector(`.tab-nav-btn[data-tab="${config.tab}"]`);
+            if (tabBtn) tabBtn.click();
+          }, 200);
+          
+          if (window.showToast) {
+            showToast(`Switched to ${config.label} ${config.icon}`, 'success');
+          }
+          
+          // Save to backend
+          try {
+            const styleReverse = {
+              calm: 'calm',
+              focused: 'modern',
+              playful: 'bright'
+            };
+            
+            const newPrefs = {
+              ...(window.userPreferences || {}),
+              interfaceStyle: styleReverse[mode],
+              stateOfMind: mode === 'focused' ? 'focused' : (mode === 'playful' ? 'curious' : 'calm')
+            };
+            
+            await fetch('/api/save-preferences', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              credentials: 'include',
+              body: JSON.stringify({ preferences: newPrefs })
+            });
+            
+            window.userPreferences = newPrefs;
+            currentUserPreferences = newPrefs;
+          } catch (err) {
+            console.error('[Mode] Save failed:', err);
+          }
+        };
+
+        // Close menu on outside click
+        document.addEventListener('click', function(e) {
+          const menu = document.getElementById('modeMenu');
+          const btn = document.getElementById('modeSwitcherBtn');
+          if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+            menu.style.display = 'none';
+          }
+        });
     </script>
 
     <!-- Auto-reload script for live development -->
@@ -2762,5 +3344,66 @@
             }
         })();
     </script>
+
+    <!-- Floating Quick Access Sidebar -->
+    <div class="floating-sidebar" id="floating-sidebar">
+      <button class="floating-btn floating-btn-games" 
+              onclick="openQuickGames()" 
+              aria-label="Quick Games"
+              title="Quick Games">
+        <span class="floating-icon">🎮</span>
+        <span class="floating-label">Games</span>
+      </button>
+      <button class="floating-btn floating-btn-support" 
+              onclick="openQuickSupport()" 
+              aria-label="Quick Support"
+              title="Quick Emotional Support">
+        <span class="floating-icon">💜</span>
+        <span class="floating-label">Support</span>
+      </button>
+    </div>
+
+    <!-- Quick Support Modal -->
+    <div class="quick-modal" id="quickSupportModal">
+      <div class="quick-modal-content">
+        <button class="quick-modal-close" onclick="closeQuickModal('quickSupportModal')">×</button>
+        <h3>💜 Quick Support</h3>
+        <p>How are you feeling right now?</p>
+        <div class="quick-support-options">
+          <button class="btn btn-secondary" onclick="quickProvideSupport('motivation')">💪 Motivation</button>
+          <button class="btn btn-secondary" onclick="quickProvideSupport('calm')">🧘 Calm</button>
+          <button class="btn btn-secondary" onclick="quickProvideSupport('happy')">😊 Cheer Up</button>
+          <button class="btn btn-secondary" onclick="quickProvideSupport('focus')">🎯 Focus</button>
+        </div>
+        <div id="quickSupportMessage" class="quick-support-message" style="display:none;"></div>
+      </div>
+    </div>
+
+    <!-- Quick Games Modal -->
+    <div class="quick-modal" id="quickGamesModal">
+      <div class="quick-modal-content">
+        <button class="quick-modal-close" onclick="closeQuickModal('quickGamesModal')">×</button>
+        <h3>🎮 Quick Games</h3>
+        <p>Take a quick break with a game!</p>
+        <div class="quick-games-grid">
+          <a href="/games/word-association.html" class="quick-game-card">
+            <span class="game-emoji">🔤</span>
+            <span>Word Association</span>
+          </a>
+          <a href="/games/story-builder.html" class="quick-game-card">
+            <span class="game-emoji">📖</span>
+            <span>Story Builder</span>
+          </a>
+          <a href="/games/puzzle-solver.html" class="quick-game-card">
+            <span class="game-emoji">🧩</span>
+            <span>Puzzle Solver</span>
+          </a>
+          <a href="/games/memory-challenge.html" class="quick-game-card">
+            <span class="game-emoji">🧠</span>
+            <span>Memory Challenge</span>
+          </a>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
